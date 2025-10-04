@@ -37,10 +37,10 @@ export default function Navbar() {
   const userId = (session as any)?.user?.id ?? (session as any)?.id ?? ""
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black text-white shadow-md">
+    <header className="  py-5  bg-black text-white shadow-md">
       <nav
         ref={navRef}
-        className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
+        className="w-full  mx-auto px-6 py-4 flex items-center justify-between"
       >
         {/* Logo */}
         <div className="logo flex items-center gap-3">
@@ -82,7 +82,7 @@ export default function Navbar() {
           ) : (
             <button
               onClick={() => signIn("github")}
-              className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full text-sm"
+              className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full text-sm"
             >
               Login
             </button>

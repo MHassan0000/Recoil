@@ -50,7 +50,7 @@ export default function Navbar() {
         </div>
 
         {/* Center links (desktop) */}
-        <ul className="hidden md:flex gap-8 text-lg">
+    <ul className={`hidden md:flex gap-8 text-lg ${session? "ml-10":""} `}>
           <li><Link href="/" className="hover:text-gray-300">Home</Link></li>
           <li><Link href="/services" className="hover:text-gray-300">Services</Link></li>
           <li><Link href="/contact" className="hover:text-gray-300">Contact</Link></li>
@@ -108,7 +108,7 @@ export default function Navbar() {
       >
         <button className="self-end text-white" onClick={() => setIsOpen(false)}>✕</button>
 
-        <nav className="flex flex-col gap-4 mt-4">
+        <nav className="flex flex-col gap-4 mt-4 ">
           <Link href="/" className="text-lg">Home</Link>
           <Link href="/services" className="text-lg">Services</Link>
           <Link href="/contact" className="text-lg">Contact</Link>

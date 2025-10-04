@@ -1,26 +1,31 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "real";
-  src: url("/fonts/Among.otf") format("opentype");
-  
+  font-family: "real2";
+  src: url("/fonts/Among2.woff2") format("opentype");
+  font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: "super";
-  src: url("/fonts/super.ttf") format("truetype");
-  font-weight: 400;
+  src: url("/fonts/super.ttf") format("woff2");
+  font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
-html,body{
+html,
+body {
   background-color: #111827;
   color: white;
   padding: 0;
   margin: 0;
+  font-family: poppins;
   scroll-behavior: smooth;
-  font-family: super;
-  
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+  backface-visibility: hidden;
 }
 
 :root {
@@ -173,7 +178,7 @@ html,body{
   border: 5px solid black;
   border-radius: 30px;
   position: relative;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .profile_title {
@@ -184,7 +189,7 @@ html,body{
   padding: 0.75rem 1.25rem;
   position: absolute;
   top: -36px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .profile_image {
@@ -197,7 +202,7 @@ html,body{
 .avatar {
   padding: 0;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .dropdown-menu {
@@ -215,7 +220,7 @@ html,body{
   color: black;
   font-family: "Work Sans", sans-serif;
   font-weight: 500;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   transition: box-shadow 0.5s;
 }
 .login:hover {
@@ -323,9 +328,3 @@ html,body{
   background-position: center;
   background-repeat: repeat-x;
 }
-
-
-
-
-
-

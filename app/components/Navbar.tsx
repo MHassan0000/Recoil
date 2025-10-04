@@ -37,20 +37,20 @@ export default function Navbar() {
   const userId = (session as any)?.user?.id ?? (session as any)?.id ?? ""
 
   return (
-    <header className=" py-5  bg-black text-white shadow-md">
+    <header className="py-5 bg-black text-white shadow-md">
       <nav
         ref={navRef}
-        className="w-full  mx-auto px-6 py-4 flex items-center justify-between"
+        className="w-full mx-auto px-6 py-4 flex items-center justify-between"
       >
         {/* Logo */}
         <div className="logo flex items-center gap-3">
           {/* public image path */}
-          <img src="/images/infinity.png" alt="logo" width={44} height={44} className="object-contain" />
-          <span className="text-3xl">Recoil</span>
+          <img src="/images/infinity.png" alt="logo" width={44} height={44} className="w-[60px]" />
+          <span className="text-5xl font-bold">Recoil</span>
         </div>
 
         {/* Center links (desktop) */}
-    <ul className={`hidden md:flex gap-8 text-lg ${session? "ml-10":""} `}>
+    <ul className={`hidden md:flex gap-8 text-lg xl:text-xl ${session? "ml-10":""} `}>
           <li><Link href="/" className="hover:text-gray-300">Home</Link></li>
           <li><Link href="/services" className="hover:text-gray-300">Services</Link></li>
           <li><Link href="/contact" className="hover:text-gray-300">Contact</Link></li>

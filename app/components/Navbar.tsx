@@ -81,7 +81,8 @@ export default function Navbar() {
             </div>
           ) : (
             <button
-              onClick={() => signIn("github")}
+              onClick={async() => 
+                await signIn("github")}
               className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full text-sm"
             >
               Login

@@ -44,7 +44,7 @@ export default function Navbar() {
         {/* Logo */}
         <div className="logo flex items-center gap-3">
           <img src="/images/infinity.png" alt="logo" width={44} height={44} className="w-[60px]" />
-          <span className="text-5xl font-bold">Recoil</span>
+          <span className="text-3xl xl:text-5xl font-bold">Recoil</span>
         </div>
 
         {/* Center links (desktop) */}

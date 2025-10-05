@@ -1,9 +1,9 @@
 import React from 'react'
-import Hero from '../Sections/Startups'
+import Startups from '../Sections/Startups'
 
 const page = () => {
   return (
-    <Hero/>
+    <Startups/>
   )
 }
 

@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useEffect, useRef, useState } from "react"
@@ -12,7 +11,7 @@ export default function Navbar() {
   const mobileMenuRef = useRef<HTMLDivElement | null>(null)
   const [isOpen, setIsOpen] = useState(false)
 
-  // entrance animation for desktop items
+  // Entrance animation
   useEffect(() => {
     if (!navRef.current) return
     const items = navRef.current.querySelectorAll("li, .logo, .auth-item, .menu-btn")
@@ -23,7 +22,7 @@ export default function Navbar() {
     )
   }, [])
 
-  // slide mobile menu
+  // Slide mobile menu
   useEffect(() => {
     if (!mobileMenuRef.current) return
     gsap.to(mobileMenuRef.current, {
@@ -33,8 +32,8 @@ export default function Navbar() {
     })
   }, [isOpen])
 
-  // session id fallback (some setups put id on session.id or session.user.id)
   const userId = (session as any)?.user?.id ?? (session as any)?.id ?? ""
+  const userImage = (session as any)?.user?.image || (session as any)?.user?.picture || null
 
   return (
     <header className="py-5 bg-black text-white shadow-md">
@@ -44,13 +43,12 @@ export default function Navbar() {
       >
         {/* Logo */}
         <div className="logo flex items-center gap-3">
-          {/* public image path */}
           <img src="/images/infinity.png" alt="logo" width={44} height={44} className="w-[60px]" />
           <span className="text-5xl font-bold">Recoil</span>
         </div>
 
         {/* Center links (desktop) */}
-    <ul className={`hidden md:flex gap-8 text-lg xl:text-xl ${session? "ml-10":""} `}>
+        <ul className={`hidden md:flex gap-8 text-lg xl:text-xl ${session ? "ml-10" : ""}`}>
           <li><Link href="/" className="hover:text-gray-300">Home</Link></li>
           <li><Link href="/services" className="hover:text-gray-300">Services</Link></li>
           <li><Link href="/contact" className="hover:text-gray-300">Contact</Link></li>
@@ -72,17 +70,21 @@ export default function Navbar() {
               </button>
 
               <Link href={`/user/${encodeURIComponent(String(userId))}`} className="flex items-center gap-2 auth-item hover:opacity-90">
-                {/* show avatar if available (basic <img> avoids next.config domains issues) */}
-                {session.user?.image ? (
-                  <img src={String(session.user.image)} alt="avatar" width={28} height={28} className="rounded-full object-cover" />
-                ) : null}
+                {userImage && (
+                  <img
+                    src={String(userImage)}
+                    alt="avatar"
+                    width={28}
+                    height={28}
+                    className="rounded-full object-cover"
+                  />
+                )}
                 <span className="text-sm">{session.user?.name ?? "User"}</span>
               </Link>
             </div>
           ) : (
             <button
-              onClick={async() => 
-                await signIn("github")}
+              onClick={() => signIn()} // opens NextAuth provider selection modal
               className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full text-sm"
             >
               Login
@@ -109,7 +111,7 @@ export default function Navbar() {
       >
         <button className="self-end text-white" onClick={() => setIsOpen(false)}>✕</button>
 
-        <nav className="flex flex-col gap-4 mt-4 ">
+        <nav className="flex flex-col gap-4 mt-4">
           <Link href="/" className="text-lg">Home</Link>
           <Link href="/services" className="text-lg">Services</Link>
           <Link href="/contact" className="text-lg">Contact</Link>
@@ -126,15 +128,21 @@ export default function Navbar() {
                 Logout
               </button>
               <Link href={`/user/${encodeURIComponent(String(userId))}`} className="flex items-center gap-3">
-                {session.user?.image ? (
-                  <img src={String(session.user.image)} alt="avatar" width={36} height={36} className="rounded-full object-cover" />
-                ) : null}
+                {userImage && (
+                  <img
+                    src={String(userImage)}
+                    alt="avatar"
+                    width={36}
+                    height={36}
+                    className="rounded-full object-cover"
+                  />
+                )}
                 <span>{session.user?.name ?? "User"}</span>
               </Link>
             </>
           ) : (
             <button
-              onClick={() => signIn("github")}
+              onClick={() => signIn()} // same modal for both Google & GitHub
               className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-white"
             >
               Login

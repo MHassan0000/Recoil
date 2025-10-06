@@ -36,7 +36,7 @@ export default function Navbar() {
   const userImage = (session as any)?.user?.image || (session as any)?.user?.picture || null
 
   return (
-    <header className="py-5 bg-black text-white shadow-md">
+    <header className="py-5 mt-5 bg-black text-white shadow-md">
       <nav
         ref={navRef}
         className="w-full mx-auto px-6 py-4 flex items-center justify-between"

@@ -1,6 +1,7 @@
 import React from 'react'
 import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 
+
 interface CardProps {
   title: string;
   subtext: string;
@@ -10,13 +11,13 @@ interface CardProps {
 const Card:React.FC<CardProps> = ({title, subtext,date,image}  ) => {
   return (
      <CardContainer className="">
-      <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-[100vh] rounded-xl p-6 border  ">
+      <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">
       <div className='flex justify-between items-center'>
 
         <div className='text-lg text-center w-2/5 border-1 border-white py-2 px-4 rounded-full bg-pink-300 mb-5'>
             {date}
         </div>
-        <div className='invert cursor-pointer hover:scale-102'>
+        <div className='invert cursor-pointer hover:scale-105'>
             <img width={30} src="/images/bookmark.png" alt="bookmark" />
         </div>
       </div>

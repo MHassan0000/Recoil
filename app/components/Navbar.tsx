@@ -36,15 +36,15 @@ export default function Navbar() {
   const userImage = (session as any)?.user?.image || (session as any)?.user?.picture || null
 
   return (
-    <header className="py-5 mt-5 bg-black text-white shadow-md">
+    <header className="py-5 mt-5 xl:mt-3 bg-black text-white shadow-md">
       <nav
         ref={navRef}
         className="w-full mx-auto px-6 py-4 flex items-center justify-between"
       >
         {/* Logo */}
         <div className="logo flex items-center gap-3">
-          <img src="/images/infinity.png" alt="logo" width={44} height={44} className="w-[60px]" />
-          <span className="text-3xl xl:text-5xl font-bold">Recoil</span>
+          <img src="/images/infinity.png" alt="logo" className="w-[60px] xl:w-[75px]" />
+          <span className="text-3xl xl:text-5xl font-bold cursor-pointer"><Link href={"/"}>Recoil</Link></span>
         </div>
 
         {/* Center links (desktop) */}

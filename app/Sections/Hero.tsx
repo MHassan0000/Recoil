@@ -29,10 +29,14 @@ const Hero = () => {
         </h1>
 
         {/* Subheading */}
-        <p className="mt-8 text-gray-200 text-sm sm:text-lg max-w-2xl">
+        <p className="mt-8 mb-10 text-gray-200 text-sm sm:text-lg max-w-2xl">
           Submit ideas, vote on pitches, and get noticed in virtual competitions.
         </p>
-        <SearchForm/>
+       
+
+
+        <SearchForm />
+       
       </div>
     </section>
   );

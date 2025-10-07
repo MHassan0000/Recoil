@@ -42,7 +42,7 @@ const SearchForm = () => {
           type="submit"
           
         >
-           <img width={50} className="font-extrabold invert hover:scale-90 cursor-pointer" src="/images/search.svg" alt="X" />
+           <img width={50} className="invert hover:scale-90 cursor-pointer" src="/images/search.svg" alt="X" />
         </button>
       </div>
     </form>

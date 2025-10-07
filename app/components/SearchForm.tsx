@@ -1,36 +1,52 @@
-import React from 'react'
-import Form from "next/form"
-import ResetForm from './ResetForm';
+"use client";
 
+import React, { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import ResetForm from "./ResetForm";
 
+const SearchForm = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentQuery = searchParams.get("query") || "";
 
-const SearchForm = ({query} : {query : string}) => {
-  
- 
+  // Local input state (real-time control)
+  const [query, setQuery] = useState(currentQuery);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+
+    // Update the URL to trigger SSR (server re-render)
+    router.push(`/?query=${encodeURIComponent(query)}`);
+  };
+
+  const handleClear = () => {
+    setQuery("");
+    
+    
+  };
+
   return (
-    <>
-      <Form action={"/"} scroll={false} className='search-form w-full text-white'>
-        <input
-        name='query'
-        defaultValue={query}
-        className='search-input'
-        placeholder='Search Startups'
-        
-        />
-        <div className='flex gap-2'>
-            {query && (
-                <ResetForm/>
-              
-            )}
-            <button type="submit" className='search-btn text-black font-extrabold'>
-                S
-            </button>
+    <form onSubmit={handleSubmit} className="search-form w-full text-white">
+      <input
+        name="query"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="search-input"
+        placeholder="Search Startups"
+      />
 
-        </div>
+      <div className="flex gap-4">
+        {query && <ResetForm onClear={handleClear} />}
+        <button
+          type="submit"
+          
+        >
+           <img width={50} className="font-extrabold invert hover:scale-90 cursor-pointer" src="/images/search.svg" alt="X" />
+        </button>
+      </div>
+    </form>
+  );
+};
 
-      </Form>
-    </>
-  )
-}
-
-export default SearchForm
+export default SearchForm;

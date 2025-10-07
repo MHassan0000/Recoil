@@ -1,23 +1,17 @@
-"use client"
-import React from 'react'
-import Link from 'next/link'
+"use client";
 
-const ResetForm = () => {
-    const handlereset = () => {
-        const form = document.querySelector(".search-form") as HTMLFormElement;
-        if (form) {
-            form.reset();
-        }
-    }
-    return (
-        <>
-            <button type="reset" onClick={handlereset}>
-                <Link href="/" className='search-btn text-black font-extrabold'>
-                X</Link>
-            </button>
+import React from "react";
 
-        </>
-    )
-}
+const ResetForm = ({ onClear }: { onClear: () => void }) => {
+  return (
+    <button
+      type="button"
+      onClick={onClear}
+      
+    >
+      <img width={35} className="invert hover:scale-90 cursor-pointer" src="/images/close.png" alt="X" />
+    </button>
+  );
+};
 
-export default ResetForm
+export default ResetForm;

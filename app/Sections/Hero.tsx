@@ -37,7 +37,7 @@ export default function Hero({ query }: { query: string }) {
         
 
 
-          <SearchForm query={query} />
+          <SearchForm/>
         
 
       </div>

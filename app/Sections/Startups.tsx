@@ -4,7 +4,7 @@ import { cardsData } from '../constants/constants'
 const Startups = () => {
   return (
      <>
-      <section className='flex flex-row justify-center items-center flex-wrap gap-10'>
+      <section className='flex  justify-center items-center flex-wrap gap-x-15'>
         {cardsData.map((item) => (
         <Card key={item.id} {...item} />
       ))}

@@ -2,7 +2,7 @@ import React from "react";
 import DarkVeil from "../components/Darkveil";
 import SearchForm from "../components/SearchForm";
 
-export default function Hero({query} : {query : string}) {
+export default function Hero({ query }: { query: string }) {
   return (
     <section className="border-1 border-white relative h-screen overflow-hidden flex items-center justify-center">
       {/* Background Layer */}
@@ -29,14 +29,17 @@ export default function Hero({query} : {query : string}) {
         </h1>
 
         {/* Subheading */}
-        <p className="mt-5   text-gray-200 text-sm sm:text-lg max-w-2xl">
+        <p className="mt-5  mb-10 text-gray-200 text-sm sm:text-lg max-w-2xl">
           Submit ideas, vote on pitches, and get noticed in virtual competitions.
         </p>
-       
 
 
-        <SearchForm query = {query}/>
-       
+        
+
+
+          <SearchForm query={query} />
+        
+
       </div>
     </section>
   );

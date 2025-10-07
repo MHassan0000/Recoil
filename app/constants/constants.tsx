@@ -22,5 +22,28 @@ export const cardsData = [
     date: "18 July 2025",
      image: "/images/Pdiddy.jpg",
   },
+  {
+    id: 4,
+    title: "Diddy startup",
+    subtext: "Kickstart your web projects",
+    date: "1 July 2025",
+     image: "/images/Pdiddy.jpg",
+  },
+  {
+    id: 5,
+    title: "Diddy startup",
+    subtext: "Kickstart your web projects",
+    date: "1 July 2025",
+     image: "/images/Pdiddy.jpg",
+  },
+   {
+    id: 6,
+    title: "Diddy startup",
+    subtext: "Kickstart your web projects",
+    date: "1 July 2025",
+     image: "/images/Pdiddy.jpg",
+  },
+  
+  
  
 ];

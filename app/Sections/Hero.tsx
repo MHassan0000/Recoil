@@ -1,8 +1,8 @@
 import React from "react";
-import DarkVeil from "../components/Darkveil"
+import DarkVeil from "../components/Darkveil";
 import SearchForm from "../components/SearchForm";
 
-const Hero = () => {
+export default function Hero({query} : {query : string}) {
   return (
     <section className="border-1 border-white relative h-screen overflow-hidden flex items-center justify-center">
       {/* Background Layer */}
@@ -11,9 +11,9 @@ const Hero = () => {
       </div>
 
       {/* Foreground Content */}
-      <div className="absolute z-50 flex flex-col items-center text-center text-white px-6 -translate-y-24">
+      <div className="absolute z-50 flex flex-col items-center text-center text-white px-6 ">
         {/* Top Tag */}
-        <div className="bg-yellow-400 text-black font-bold text-xs sm:text-sm tracking-wide uppercase px-5 py-2 rounded-md shadow-md mb-5">
+        <div className="bg-yellow-400 text-black font-bold my-5 text-xs sm:text-sm tracking-wide uppercase px-5 py-2 rounded-md shadow-md mb-5">
           Pitch, Vote and Grow
         </div>
 
@@ -29,17 +29,17 @@ const Hero = () => {
         </h1>
 
         {/* Subheading */}
-        <p className="mt-8 mb-10 text-gray-200 text-sm sm:text-lg max-w-2xl">
+        <p className="mt-5   text-gray-200 text-sm sm:text-lg max-w-2xl">
           Submit ideas, vote on pitches, and get noticed in virtual competitions.
         </p>
        
 
 
-        <SearchForm />
+        <SearchForm query = {query}/>
        
       </div>
     </section>
   );
 };
 
-export default Hero;
+

@@ -36,7 +36,7 @@ export default function Navbar() {
   const userImage = (session as any)?.user?.image || (session as any)?.user?.picture || null
 
   return (
-   <header className=" w-full bg-black/80 backdrop-blur-md text-white shadow-md">
+   <header className="xl:py-4 py-2 w-full bg-black/80 backdrop-blur-md text-white shadow-md">
 
       <nav
         ref={navRef}

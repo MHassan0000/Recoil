@@ -13,7 +13,7 @@ export default function Hero({ query }: { query: string }) {
       {/* Foreground Content */}
       <div className="absolute z-20 flex flex-col items-center text-center text-white px-6 ">
         {/* Top Tag */}
-        <div className="bg-yellow-400 text-black font-bold my-5 text-xs sm:text-sm tracking-wide uppercase px-5 py-2 rounded-md shadow-md mb-5">
+        <div className="bg-yellow-400 text-black font-bold my-5 text-xs sm:text-sm tracking-wide uppercase px-6 py-3 rounded-md shadow-md mb-5">
           Pitch, Vote and Grow
         </div>
 

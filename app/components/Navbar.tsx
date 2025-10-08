@@ -43,9 +43,11 @@ export default function Navbar() {
         className="w-full mx-auto px-6 py-4 flex items-center justify-between"
       >
         {/* Logo */}
-        <div className="logo flex items-center gap-3">
-          <img src="/images/infinity.png" alt="logo" className="w-[60px] xl:w-[75px]" />
-          <span className="text-3xl xl:text-5xl font-bold cursor-pointer"><Link href={"/"}>Recoil</Link></span>
+        <div className="logo flex items-center gap-3 cursor-pointer">
+          <Link href={"/"}>
+          <img src="/images/infinity.png" alt="logo" className="w-[60px] xl:w-[75px]" /></Link>
+          <Link href={"/"}><span className="text-3xl xl:text-5xl font-bold  hover:text-gray-400">Recoil</span></Link>
+          
         </div>
 
         {/* Center links (desktop) */}

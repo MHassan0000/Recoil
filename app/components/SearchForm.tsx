@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ResetForm from "./ResetForm";
+import TitleHeader from "./TitleHeader";
 
 const SearchForm = () => {
   const router = useRouter();
@@ -22,30 +23,34 @@ const SearchForm = () => {
 
   const handleClear = () => {
     setQuery("");
-    
-    
+
+
   };
 
   return (
-    <form onSubmit={handleSubmit} className="search-form w-full text-white">
-      <input
-        name="query"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="search-input"
-        placeholder="Search Startups"
-      />
+    <>
+      <form onSubmit={handleSubmit} className="search-form w-full text-white">
+        <input
+          name="query"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="search-input"
+          placeholder="Search Startups"
+        />
 
-      <div className="flex gap-4">
-        {query && <ResetForm onClear={handleClear} />}
-        <button
-          type="submit"
-          
-        >
-           <img width={50} className="invert hover:scale-90 cursor-pointer" src="/images/search.svg" alt="X" />
-        </button>
-      </div>
-    </form>
+        <div className="flex gap-4">
+          {query && <ResetForm onClear={handleClear} />}
+          <button
+            type="submit"
+
+          >
+            <img width={50} className="invert hover:scale-90 cursor-pointer" src="/images/search.svg" alt="X" />
+          </button>
+        </div>
+      </form>
+      
+    </>
+
   );
 };
 

@@ -5,12 +5,15 @@ import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 interface CardProps {
   title: string;
   subtext: string;
+  author : string;
+  category : string;
   date: string;
   image: string;
+  views? : number;
 }
-const Card:React.FC<CardProps> = ({title, subtext,date,image}  ) => {
+const Card:React.FC<CardProps> = ({title, subtext,author,category,date,image,views}  ) => {
   return (
-     <CardContainer className="border-1 border-white">
+     <CardContainer>
       <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1]  dark:bg-black dark:border-white/[0.2] border-black/[0.1]  sm:w-[35rem] h-auto !w-[30rem]  rounded-xl p-6 border  ">
       <div className='flex justify-between items-center'>
         <div className='text-lg text-center w-2/5 border-1 border-white py-2 px-4 rounded-full bg-pink-300 mb-5'>
@@ -47,20 +50,30 @@ const Card:React.FC<CardProps> = ({title, subtext,date,image}  ) => {
             alt="thumbnail"
           />
         </CardItem>
+        <CardItem
+        
+          translateZ="30"
+          className="text-white font-bold  text-xl max-w-sm mt-2 dark:text-neutral-300"
+        >
+          Author:   {author}
+        </CardItem>
         <div className="flex justify-between items-center mt-20">
           <CardItem
             translateZ={10}
             translateX={-10}
             as="button"
-            className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white"
+            className="px-4 py-2 rounded-xl text-lg font-normal dark:text-white"
           >
-            Try now →
+            <span>
+            
+              <img className='invert w-[27px]' src="/images/visible.png" alt="Views" />
+              {views}</span>
           </CardItem>
           <CardItem
             translateZ={10}
             translateX={10}
             as="button"
-            className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold"
+            className="px-5 py-3 hover:bg-pink-600 hover:text-white transition-colors hover:scale-105 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold"
           >
             Details
           </CardItem>

@@ -8,7 +8,7 @@ export default async function  Page({searchParams} :{searchParams : Promise<{que
   return (
     <>
       <Hero query = {query}/>
-      <Startups />
+      <Startups query={query} />
     </>
   );
 }

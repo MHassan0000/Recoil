@@ -1,6 +1,7 @@
 import React from 'react'
 import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 import { formatDate } from '@/lib/utils';
+import Link from 'next/link';
 
 interface CardProps {
   title: string;
@@ -80,7 +81,9 @@ const Card: React.FC<CardProps> = ({
           translateZ="30"
           className="text-white font-bold text-lg mt-2 dark:text-neutral-300 shrink-0"
         >
+          <Link href={`user/${author}`}>
           Author: {author}
+          </Link>
         </CardItem>
 
         {/* Bottom Controls */}

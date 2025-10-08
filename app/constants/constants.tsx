@@ -4,10 +4,10 @@ export const Posts = [
   {
     id: 1,
     title: "Chrome Extension",
-    subtext: "Unleash your full potential",
+    subtext: "Unleash your potential r full potentialUnleash your full por full potentialUnleash your full por full potentialUnleash your full po psh your potential r full potentialUnleash your full por full potentialUnleash your full por full potentialUnleash your full povsh your potential r full potentialUnleash your full por full potentialUnleash your full por full potentialUnleash your full poyour full po psh your potential r full potentialUnleash your full por full potentialUnleash your full por full potentialUnleash your full povsh your potential r full potentialUnleash your full por full potentialUnleash your full por full pyour full po psh your potential r full potentialUnleash your full por full potentialUnleash your full por full potentialUnleash your full povsh your potential r full potentialUnleash your full por full potentialUnleash your full por full p",
     author :"john pork",
     category: "Robots",
-    date: "20 May 2025",
+    date: "25 december 2025",
     image: "/images/Pdiddy.jpg",
     views : 55,
   },

@@ -7,7 +7,7 @@ export default async function  Page({searchParams} :{searchParams : Promise<{que
   const query = (await searchParams).query
   return (
     <>
-      <Hero query = {query}/>
+      <Hero  query = {query}/>
       <Startups query={query} />
     </>
   );

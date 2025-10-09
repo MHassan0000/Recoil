@@ -13,7 +13,7 @@ export default function Startups({ query }: { query: string }) {
         (post) =>
           post.title.toLowerCase().includes(searchQuery) ||
           post.category.toLowerCase().includes(searchQuery) ||
-          post.author.toLowerCase().includes(searchQuery)
+          post.author.name.toLowerCase().includes(searchQuery)
       )
     : Posts;
 

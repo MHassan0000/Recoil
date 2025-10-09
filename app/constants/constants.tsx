@@ -1,35 +1,54 @@
-// constants/cardsData.js
-
 export const Posts = [
   {
     id: 1,
     title: "Chrome Extension",
-    subtext: "Unleash your potential r full potentialUnleash your full por full potentialUnleash your full por ",
-    author :"john pork",
+    subtext: "Unleash your full potential Unleash your full potential Unleash your full potential.",
+    author: {
+      id: 101,
+      name: "John Pork"
+    },
     category: "Robots",
-    date: "25 december 2025",
+    date: "25 December 2025",
     image: "/images/Pdiddy.jpg",
-    views : 55,
+    views: 55,
   },
   {
     id: 2,
     title: "AI Productivity Tool",
-    subtext: "Boost your daily workflow",
-    author :"john pork",
-    category: "Robots",
+    subtext: "Boost your daily workflow with smart automation tools.",
+    author: {
+      id: 101,
+      name: "John Pork"
+    },
+    category: "Technology",
     date: "05 June 2025",
-     image: "/images/Pdiddy.jpg",
-     views : 77,
+    image: "/images/Pdiddy.jpg",
+    views: 77,
   },
   {
     id: 3,
-    title: "Next.js Starter Kit",
-    subtext: "Kickstart your web projects",
-    author :"john pork",
-    category: "Robots",
-    date: "18 July 2025",
-     image: "/images/Pdiddy.jpg",
-     views : 88,
+    title: "AI Productivity Tool",
+    subtext: "Boost your daily workflow with smart automation tools.",
+    author: {
+      id: 101,
+      name: "John Pork"
+    },
+    category: "Technology",
+    date: "05 June 2025",
+    image: "/images/Pdiddy.jpg",
+    views: 77,
   },
- 
+  {
+    id: 4,
+    title: "AI Productivity Tool",
+    subtext: "Boost your daily workflow with smart automation tools.",
+    author: {
+      id: 101,
+      name: "John Pork"
+    },
+    category: "Technology",
+    date: "05 June 2025",
+    image: "/images/Pdiddy.jpg",
+    views: 77,
+  },
 ];

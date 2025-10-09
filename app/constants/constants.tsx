@@ -4,7 +4,7 @@ export const Posts = [
   {
     id: 1,
     title: "Chrome Extension",
-    subtext: "Unleash your potential r full potentialUnleash your full por full potentialUnleash your full por full potentialUnleash your full po psh your potential r full potentialUnleash your full por full potentialUnleash your full por full potentialUnleash your full povsh your potential r full potentialUnleash your full por full potentialUnleash your full por full potentialUnleash your full poyour full po psh your potential r full potentialUnleash your full por full potentialUnleash your full por full potentialUnleash your full povsh your potential r full potentialUnleash your full por full potentialUnleash your full por full pyour full po psh your potential r full potentialUnleash your full por full potentialUnleash your full por full potentialUnleash your full povsh your potential r full potentialUnleash your full por full potentialUnleash your full por full p",
+    subtext: "Unleash your potential r full potentialUnleash your full por full potentialUnleash your full por ",
     author :"john pork",
     category: "Robots",
     date: "25 december 2025",

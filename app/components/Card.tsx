@@ -88,17 +88,29 @@ const Card: React.FC<CardProps> = ({
           </Link>
         </CardItem>
 
-        {/* Author */}
+        {/* Author Section */}
         <CardItem
           translateZ="30"
           className="text-white font-bold text-lg mt-2 dark:text-neutral-300 shrink-0 cursor-pointer"
         >
           {author?.id ? (
-            <Link href={`/authors/${author.id}`}>
-              Author: {author.name}
+            <Link href={`/user/${author.id}`} className="flex items-center gap-3">
+              <img
+                src="/images/client1.png"
+                alt={author.name}
+                className="w-8 h-8 rounded-full object-cover border border-white/30 hover:scale-105 transition-transform"
+              />
+              <span className="text-neutral-800 dark:text-neutral-200">{author.name}</span>
             </Link>
           ) : (
-            <span>Author: {author.name}</span>
+            <div className="flex items-center gap-3">
+              <img
+                src="/images/client1.png"
+                alt={author.name}
+                className="w-8 h-8 rounded-full object-cover border border-white/30"
+              />
+              <span className="text-neutral-800 dark:text-neutral-200">{author.name}</span>
+            </div>
           )}
         </CardItem>
 
@@ -114,23 +126,23 @@ const Card: React.FC<CardProps> = ({
             {views}
           </CardItem>
 
-          <Link href={`/startups/${id}`}>
-            <CardItem
-              translateZ={10}
-              translateX={10}
-              as="button"
-              className="
-                px-5 py-3 rounded-xl
+          <CardItem
+            translateZ={10}
+            translateX={10}
+            as="button"
+            className="
+                px-5 py-3 rounded-full
                 text-xs font-bold
                 bg-black text-white
                 dark:bg-white dark:text-black
                 hover:bg-pink-600 hover:text-white
                 hover:scale-105 transition-all duration-200 cursor-pointer
               "
-            >
+          >
+            <Link href={`/startups/${id}`}>
               Details
-            </CardItem>
-          </Link>
+            </Link>
+          </CardItem>
         </div>
       </CardBody>
     </CardContainer>

@@ -3,10 +3,16 @@ import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 
+interface Author {
+  id: string | number;
+  name: string;
+}
+
 interface CardProps {
+  id: string | number;
   title: string;
   subtext: string;
-  author: string;
+  author: Author;
   category: string;
   date: string;
   image: string;
@@ -14,6 +20,7 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({
+  id,
   title,
   subtext,
   author,
@@ -40,6 +47,7 @@ const Card: React.FC<CardProps> = ({
           <div className="text-lg text-center py-2 px-4 rounded-full bg-orange-500 text-white">
             {formatDate(date)}
           </div>
+          {/* Bookmark */}
           <div className="invert cursor-pointer hover:scale-105 transition-transform">
             <img width={30} src="/images/bookmark.png" alt="bookmark" />
           </div>
@@ -48,12 +56,14 @@ const Card: React.FC<CardProps> = ({
         {/* Title */}
         <CardItem
           translateZ="50"
-          className="text-xl font-bold text-neutral-600 dark:text-white shrink-0"
+          className="text-xl font-bold text-neutral-600 dark:text-white shrink-0 cursor-pointer"
         >
-          {title}
+          <Link href={`/startups/${id}`}>
+            {title}
+          </Link>
         </CardItem>
 
-        {/* Subtext - CLAMPED so it cannot push layout */}
+        {/* Subtext */}
         <CardItem
           as="p"
           translateZ="30"
@@ -67,23 +77,29 @@ const Card: React.FC<CardProps> = ({
 
         {/* Image */}
         <CardItem translateZ="100" className="w-full mt-2 mb-4 shrink-0">
-          <img
-            src={image}
-            height="750"
-            width="750"
-            className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl transition-all duration-300"
-            alt="thumbnail"
-          />
+          <Link href={`/startups/${id}`}>
+            <img
+              src={image}
+              height="750"
+              width="750"
+              className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl transition-all duration-300 cursor-pointer"
+              alt={title}
+            />
+          </Link>
         </CardItem>
 
         {/* Author */}
         <CardItem
           translateZ="30"
-          className="text-white font-bold text-lg mt-2 dark:text-neutral-300 shrink-0"
+          className="text-white font-bold text-lg mt-2 dark:text-neutral-300 shrink-0 cursor-pointer"
         >
-          <Link href={`user/${author}`}>
-          Author: {author}
-          </Link>
+          {author?.id ? (
+            <Link href={`/authors/${author.id}`}>
+              Author: {author.name}
+            </Link>
+          ) : (
+            <span>Author: {author.name}</span>
+          )}
         </CardItem>
 
         {/* Bottom Controls */}
@@ -98,21 +114,23 @@ const Card: React.FC<CardProps> = ({
             {views}
           </CardItem>
 
-          <CardItem
-            translateZ={10}
-            translateX={10}
-            as="button"
-            className="
-              px-5 py-3 rounded-xl
-              text-xs font-bold
-              bg-black text-white
-              dark:bg-white dark:text-black
-              hover:bg-pink-600 hover:text-white
-              hover:scale-105 transition-all duration-200
-            "
-          >
-            Details
-          </CardItem>
+          <Link href={`/startups/${id}`}>
+            <CardItem
+              translateZ={10}
+              translateX={10}
+              as="button"
+              className="
+                px-5 py-3 rounded-xl
+                text-xs font-bold
+                bg-black text-white
+                dark:bg-white dark:text-black
+                hover:bg-pink-600 hover:text-white
+                hover:scale-105 transition-all duration-200 cursor-pointer
+              "
+            >
+              Details
+            </CardItem>
+          </Link>
         </div>
       </CardBody>
     </CardContainer>

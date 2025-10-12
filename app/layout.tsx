@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {Poppins, Geist, Geist_Mono } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
+import 'easymde/dist/easymde.min.css';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

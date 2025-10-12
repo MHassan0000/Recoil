@@ -36,7 +36,7 @@ export default function Navbar() {
   const userImage = (session as any)?.user?.image || (session as any)?.user?.picture || null
 
   return (
-   <header className="xl:py-4 py-2 w-full bg-black/80 backdrop-blur-md text-white shadow-md">
+    <header className="xl:py-4 py-2 w-full bg-black/80 backdrop-blur-md text-white shadow-md">
 
       <nav
         ref={navRef}
@@ -45,16 +45,46 @@ export default function Navbar() {
         {/* Logo */}
         <div className="logo flex items-center gap-3 cursor-pointer">
           <Link href={"/"}>
-          <img src="/images/infinity.png" alt="logo" className="w-[60px] xl:w-[75px]" /></Link>
+            <img src="/images/infinity.png" alt="logo" className="w-[60px] xl:w-[75px]" /></Link>
           <Link href={"/"}><span className="text-3xl xl:text-5xl font-bold  hover:text-gray-400">Recoil</span></Link>
-          
+
         </div>
 
         {/* Center links (desktop) */}
         <ul className={`hidden md:flex gap-8 text-lg xl:text-xl ${session ? "ml-10" : ""}`}>
-          <li><Link href="/" className="hover:text-gray-300">Home</Link></li>
-          <li><Link href="/services" className="hover:text-gray-300">Services</Link></li>
-          <li><Link href="/contact" className="hover:text-gray-300">Contact</Link></li>
+          <li>
+            <Link
+              href="/"
+              className="relative group transition-all duration-300"
+            >
+              <span className="text-white transition-colors duration-300 group-hover:text-gray-200">
+                Home
+              </span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-indigo-400 to-pink-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/services"
+              className="relative group transition-all duration-300"
+            >
+              <span className="text-white transition-colors duration-300 group-hover:text-gray-200">
+                Services
+              </span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/studio"
+              className="relative group transition-all duration-300"
+            >
+              <span className="text-white transition-colors duration-300 group-hover:text-gray-200">
+                Studio
+              </span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-pink-500 to-yellow-400 transition-all duration-300 group-hover:w-full rounded-full"></span>
+            </Link>
+          </li>
         </ul>
 
         {/* Auth area (desktop) */}

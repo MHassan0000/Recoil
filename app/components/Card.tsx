@@ -5,8 +5,12 @@ import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 
 interface Author {
-  id: string | number;
+  id: number;
   name: string;
+  username?: string;
+  email?: string;
+  image?: string;
+  bio?: string;
 }
 
 interface CardProps {
@@ -20,10 +24,14 @@ const Card: React.FC<CardProps> = ({ post }) => {
   const author: Author = {
     id: post.author?._id ?? post.author?.id ?? "",
     name: post.author?.name ?? "",
+    username: post.author?.username ?? "",
+    email: post.author?.email ?? "",
+    image: post.author?.image ?? "",
+    bio: post.author?.bio ?? "",
   };
   const category = post.category;
   const date = post._createdAt ?? post.date;
-  
+
   const views = post.views ?? 0;
   return (
     <CardContainer>

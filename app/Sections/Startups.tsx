@@ -11,7 +11,7 @@ export default async function Startups({ query }: { query: string }) {
 
   const searchQuery = query?.trim().toLowerCase() || "";
 
-  // Filter posts if query is provided (preserve order from the query)
+  //Filter for search
   const filteredPosts = searchQuery
     ? Posts.filter((post: any) => {
         const title = (post.title || "").toString().toLowerCase();
@@ -24,9 +24,6 @@ export default async function Startups({ query }: { query: string }) {
         );
       })
     : Posts;
-
-  // For now pass the fetched Sanity documents straight through to the Card component.
-  // Use _id as the key so React has a stable identifier coming from Sanity.
   const mappedPosts = filteredPosts;
 
   return (

@@ -1,6 +1,7 @@
 import React from 'react'
 import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 import { formatDate } from '@/lib/utils';
+
 import Link from 'next/link';
 
 interface Author {
@@ -9,26 +10,21 @@ interface Author {
 }
 
 interface CardProps {
-  id: string | number;
-  title: string;
-  subtext: string;
-  author: Author;
-  category: string;
-  date: string;
-  image: string;
-  views?: number;
+  post: any;
 }
 
-const Card: React.FC<CardProps> = ({
-  id,
-  title,
-  subtext,
-  author,
-  category,
-  date,
-  image,
-  views
-}) => {
+const Card: React.FC<CardProps> = ({ post }) => {
+  const id = post._id ?? post.id;
+  const title = post.title;
+  const subtext = post.description;
+  const author: Author = {
+    id: post.author?._id ?? post.author?.id ?? "",
+    name: post.author?.name ?? "",
+  };
+  const category = post.category;
+  const date = post._createdAt ?? post.date;
+  
+  const views = post.views ?? 0;
   return (
     <CardContainer>
       <CardBody
@@ -79,7 +75,7 @@ const Card: React.FC<CardProps> = ({
         <CardItem translateZ="100" className="w-full mt-2 mb-4 shrink-0">
           <Link href={`/startups/${id}`}>
             <img
-              src={image}
+              src={post.image}
               height="750"
               width="750"
               className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl transition-all duration-300 cursor-pointer"

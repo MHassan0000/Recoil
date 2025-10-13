@@ -1,21 +1,33 @@
 import React from "react";
 import Card from "../components/Card";
-import { Posts } from "../constants/constants";
+import {client} from "../../sanity/lib/client";
 import TitleHeader from "../components/TitleHeader";
+import { STARTUPS_QUERY } from "@/sanity/lib/queries";
 
-export default function Startups({ query }: { query: string }) {
-  // Normalize query
+export default async function Startups({ query }: { query: string }) {
+  
+
+  const Posts: any[] = await client.fetch(STARTUPS_QUERY);
+
   const searchQuery = query?.trim().toLowerCase() || "";
 
-  // Filter posts if query is provided
+  // Filter posts if query is provided (preserve order from the query)
   const filteredPosts = searchQuery
-    ? Posts.filter(
-        (post) =>
-          post.title.toLowerCase().includes(searchQuery) ||
-          post.category.toLowerCase().includes(searchQuery) ||
-          post.author.name.toLowerCase().includes(searchQuery)
-      )
+    ? Posts.filter((post: any) => {
+        const title = (post.title || "").toString().toLowerCase();
+        const category = (post.category || "").toString().toLowerCase();
+        const authorName = (post.author?.name || "").toString().toLowerCase();
+        return (
+          title.includes(searchQuery) ||
+          category.includes(searchQuery) ||
+          authorName.includes(searchQuery)
+        );
+      })
     : Posts;
+
+  // For now pass the fetched Sanity documents straight through to the Card component.
+  // Use _id as the key so React has a stable identifier coming from Sanity.
+  const mappedPosts = filteredPosts;
 
   return (
     <>
@@ -32,10 +44,10 @@ export default function Startups({ query }: { query: string }) {
         </div>
 
         <div className="flex flex-wrap justify-center items-center gap-10 mt-5">
-          {filteredPosts.length > 0 ? (
-            filteredPosts.map((item) => (
-              <Card key={item.id} {...item} />
-            ))
+          {mappedPosts.length > 0 ? (
+              mappedPosts.map((item: any) => (
+                <Card key={item._id} post={item} />
+              ))
           ) : (
             <p className="text-gray-400 text-lg mt-5">
               No startups found for “{query}”.

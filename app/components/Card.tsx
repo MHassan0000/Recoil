@@ -100,7 +100,7 @@ const Card: React.FC<CardProps> = ({ post }) => {
           {author?.id ? (
             <Link href={`/user/${author.id}`} className="flex items-center gap-3">
               <img
-                src="/images/client1.png"
+                src={author.image || '/images/client1.png'}
                 alt={author.name}
                 className="w-8 h-8 rounded-full object-cover border border-white/30 hover:scale-105 transition-transform"
               />
@@ -109,9 +109,9 @@ const Card: React.FC<CardProps> = ({ post }) => {
           ) : (
             <div className="flex items-center gap-3">
               <img
-                src="/images/client1.png"
+                src="/images/user.png"
                 alt={author.name}
-                className="w-8 h-8 rounded-full object-cover border border-white/30"
+                className="w-8 h-8 rounded-full invert object-cover border border-white/30"
               />
               <span className="text-neutral-800 dark:text-neutral-200">{author.name}</span>
             </div>

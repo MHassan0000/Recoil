@@ -1,14 +1,14 @@
 import React from "react";
 import Card, { CardType } from "../components/Card";
-import {client} from "../../sanity/lib/client";
 import TitleHeader from "../components/TitleHeader";
 import { STARTUPS_QUERY } from "@/sanity/lib/queries";
+import { sanityFetch ,SanityLive} from "@/sanity/lib/live";
+
 
 export default async function Startups({ query }: { query: string }) {
   
 
-  const Posts: any[] = await client.fetch(STARTUPS_QUERY);
-
+  const { data: Posts } = await sanityFetch({ query: STARTUPS_QUERY });
   const searchQuery = query?.trim().toLowerCase() || "";
 
   //Filter for search
@@ -52,6 +52,7 @@ export default async function Startups({ query }: { query: string }) {
           )}
         </div>
       </section>
+      <SanityLive />
     </>
   );
 }

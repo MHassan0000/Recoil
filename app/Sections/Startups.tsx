@@ -17,10 +17,12 @@ export default async function Startups({ query }: { query: string }) {
         const title = (post.title || "").toString().toLowerCase();
         const category = (post.category || "").toString().toLowerCase();
         const authorName = (post.author?.name || "").toString().toLowerCase();
+        const description = (post.description || "").toString().toLowerCase();
         return (
           title.includes(searchQuery) ||
           category.includes(searchQuery) ||
-          authorName.includes(searchQuery)
+          authorName.includes(searchQuery) ||
+          description.includes(searchQuery)
         );
       })
     : Posts;

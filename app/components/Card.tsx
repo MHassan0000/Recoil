@@ -1,38 +1,20 @@
-import React from 'react'
+import React from "react";
 import { CardBody, CardContainer, CardItem } from "../components/3dcard";
-import { formatDate } from '@/lib/utils';
+import { formatDate } from "@/lib/utils";
+import { Startup, Author } from "../../sanity/types";
+import Link from "next/link";
 
-import Link from 'next/link';
+export type CardType = Omit<Startup, "author"> & { author?: Author };
 
-interface Author {
-  id: number;
-  name: string;
-  username?: string;
-  email?: string;
-  image?: string;
-  bio?: string;
-}
-
-interface CardProps {
-  post: any;
-}
-
-const Card: React.FC<CardProps> = ({ post }) => {
-  const id = post._id ?? post.id;
-  const title = post.title;
-  const subtext = post.description;
-  const author: Author = {
-    id: post.author?._id ?? post.author?.id ?? "",
-    name: post.author?.name ?? "",
-    username: post.author?.username ?? "",
-    email: post.author?.email ?? "",
-    image: post.author?.image ?? "",
-    bio: post.author?.bio ?? "",
-  };
-  const category = post.category;
-  const date = post._createdAt ?? post.date;
-
+const Card = ({ post }: { post: CardType }) => {
+  const id = post._id ?? "";
+  const title = post.title ?? "";
+  const subtext = post.description ?? "";
+  const category = post.category ?? "";
+  const date = post._createdAt ?? "";
   const views = post.views ?? 0;
+  const author = post.author;
+
   return (
     <CardContainer>
       <CardBody
@@ -62,9 +44,7 @@ const Card: React.FC<CardProps> = ({ post }) => {
           translateZ="50"
           className="text-xl font-bold text-neutral-600 dark:text-white shrink-0 cursor-pointer"
         >
-          <Link href={`/startups/${id}`}>
-            {title}
-          </Link>
+          <Link href={`/startups/${id}`}>{title}</Link>
         </CardItem>
 
         {/* Subtext */}
@@ -83,7 +63,7 @@ const Card: React.FC<CardProps> = ({ post }) => {
         <CardItem translateZ="100" className="w-full mt-2 mb-4 shrink-0">
           <Link href={`/startups/${id}`}>
             <img
-              src={post.image}
+              src={post.image ?? "/images/placeholder.png"}
               height="750"
               width="750"
               className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl transition-all duration-300 cursor-pointer"
@@ -97,23 +77,27 @@ const Card: React.FC<CardProps> = ({ post }) => {
           translateZ="30"
           className="text-white font-bold text-lg mt-2 dark:text-neutral-300 shrink-0 cursor-pointer"
         >
-          {author?.id ? (
-            <Link href={`/user/${author.id}`} className="flex items-center gap-3">
+          {author?._id ? (
+            <Link href={`/user/${author._id}`} className="flex items-center gap-3">
               <img
-                src={author.image || '/images/client1.png'}
-                alt={author.name}
+                src={author.image || "/images/client1.png"}
+                alt={author.name || "Author"}
                 className="w-8 h-8 rounded-full object-cover border border-white/30 hover:scale-105 transition-transform"
               />
-              <span className="text-neutral-800 dark:text-neutral-200">{author.name}</span>
+              <span className="text-neutral-800 dark:text-neutral-200">
+                {author.name}
+              </span>
             </Link>
           ) : (
             <div className="flex items-center gap-3">
               <img
                 src="/images/user.png"
-                alt={author.name}
+                alt="Unknown Author"
                 className="w-8 h-8 rounded-full invert object-cover border border-white/30"
               />
-              <span className="text-neutral-800 dark:text-neutral-200">{author.name}</span>
+              <span className="text-neutral-800 dark:text-neutral-200">
+                {author?.name || "Unknown"}
+              </span>
             </div>
           )}
         </CardItem>
@@ -135,17 +119,15 @@ const Card: React.FC<CardProps> = ({ post }) => {
             translateX={10}
             as="button"
             className="
-                px-5 py-3 rounded-full
-                text-xs font-bold
-                bg-black text-white
-                dark:bg-white dark:text-black
-                hover:bg-pink-600 hover:text-white
-                hover:scale-105 transition-all duration-200 cursor-pointer
-              "
+              px-5 py-3 rounded-full
+              text-xs font-bold
+              bg-black text-white
+              dark:bg-white dark:text-black
+              hover:bg-pink-600 hover:text-white
+              hover:scale-105 transition-all duration-200 cursor-pointer
+            "
           >
-            <Link href={`/startups/${id}`}>
-              Details
-            </Link>
+            <Link href={`/startups/${id}`}>Details</Link>
           </CardItem>
         </div>
       </CardBody>

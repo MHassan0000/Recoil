@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "../components/Card";
+import Card, { CardType } from "../components/Card";
 import {client} from "../../sanity/lib/client";
 import TitleHeader from "../components/TitleHeader";
 import { STARTUPS_QUERY } from "@/sanity/lib/queries";
@@ -42,7 +42,7 @@ export default async function Startups({ query }: { query: string }) {
 
         <div className="flex flex-wrap justify-center items-center gap-10 mt-5">
           {mappedPosts.length > 0 ? (
-              mappedPosts.map((item: any) => (
+              mappedPosts.map((item: CardType) => (
                 <Card key={item._id} post={item} />
               ))
           ) : (

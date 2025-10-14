@@ -13,7 +13,7 @@ const Card = ({ post }: { post: CardType }) => {
   const category = post.category ?? "";
   const date = post._createdAt ?? "";
   const views = post.views ?? 0;
-  const author = post.author;
+  const author = post.author ?? undefined;
 
   return (
     <CardContainer>

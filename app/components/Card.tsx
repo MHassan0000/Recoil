@@ -3,6 +3,7 @@ import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 import { formatDate } from "@/lib/utils";
 import { Startup, Author } from "../../sanity/types";
 import Link from "next/link";
+import { div } from "motion/react-client";
 
 export type CardType = Omit<Startup, "author"> & { author?: Author };
 
@@ -52,11 +53,57 @@ const Card = ({ post }: { post: CardType }) => {
           as="p"
           translateZ="30"
           className="
-            text-neutral-500 text-sm mt-2 mb-6 dark:text-neutral-300 leading-relaxed
+            text-neutral-500 text-sm mt-2  dark:text-neutral-300 leading-relaxed
             line-clamp-3 overflow-hidden
           "
         >
           {subtext}
+        </CardItem>
+
+        {/* Author Section */}
+        <CardItem
+          translateZ="30"
+          className="text-white font-bold text-lg dark:text-neutral-300 shrink-0 cursor-pointer w-full"
+        >
+          {author?._id ? (
+            <div className="flex items-center justify-between w-full">
+              {/* Left Side: Author */}
+              <div className="flex items-center gap-3">
+                <Link href={`/user/${author._id}`} className="flex items-center gap-3">
+                  <img
+                    src={author.image || "/images/client1.png"}
+                    alt={author.name || "Author"}
+                    className="w-8 h-8 rounded-full object-cover border border-white/30 hover:scale-105 transition-transform"
+                  />
+                  <span className="text-neutral-800 dark:text-neutral-200">
+                    {author.name}
+                  </span>
+                </Link>
+              </div>
+
+              {/* Right Side: Category */}
+              <Link href={`/?query=${category?.toLowerCase()}`}>
+                <p className="text-sm font-bold dark:text-neutral-500">{category}</p>
+              </Link>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                <img
+                  src="/images/user.png"
+                  alt="Unknown Author"
+                  className="w-8 h-8 rounded-full invert object-cover border border-white/30"
+                />
+                <span className="text-neutral-800 dark:text-neutral-200">
+                  {author?.name || "Unknown"}
+                </span>
+              </div>
+
+              <Link href={`/?query=${category?.toLowerCase()}`}>
+                <p className="text-sm font-bold dark:text-neutral-500">{category}</p>
+              </Link>
+            </div>
+          )}
         </CardItem>
 
         {/* Image */}
@@ -70,36 +117,6 @@ const Card = ({ post }: { post: CardType }) => {
               alt={title}
             />
           </Link>
-        </CardItem>
-
-        {/* Author Section */}
-        <CardItem
-          translateZ="30"
-          className="text-white font-bold text-lg mt-2 dark:text-neutral-300 shrink-0 cursor-pointer"
-        >
-          {author?._id ? (
-            <Link href={`/user/${author._id}`} className="flex items-center gap-3">
-              <img
-                src={author.image || "/images/client1.png"}
-                alt={author.name || "Author"}
-                className="w-8 h-8 rounded-full object-cover border border-white/30 hover:scale-105 transition-transform"
-              />
-              <span className="text-neutral-800 dark:text-neutral-200">
-                {author.name}
-              </span>
-            </Link>
-          ) : (
-            <div className="flex items-center gap-3">
-              <img
-                src="/images/user.png"
-                alt="Unknown Author"
-                className="w-8 h-8 rounded-full invert object-cover border border-white/30"
-              />
-              <span className="text-neutral-800 dark:text-neutral-200">
-                {author?.name || "Unknown"}
-              </span>
-            </div>
-          )}
         </CardItem>
 
         {/* Bottom Controls */}

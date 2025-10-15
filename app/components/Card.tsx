@@ -3,7 +3,7 @@ import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 import { formatDate } from "@/lib/utils";
 import { Startup, Author } from "../../sanity/types";
 import Link from "next/link";
-import { div } from "motion/react-client";
+
 
 export type CardType = Omit<Startup, "author"> & { author?: Author };
 
@@ -45,7 +45,7 @@ const Card = ({ post }: { post: CardType }) => {
           translateZ="50"
           className="text-xl font-bold text-neutral-600 dark:text-white shrink-0 cursor-pointer"
         >
-          <Link href={`/startups/${id}`}>{title}</Link>
+          <Link href={`/Startup/${id}`}>{title}</Link>
         </CardItem>
 
         {/* Subtext */}
@@ -108,7 +108,7 @@ const Card = ({ post }: { post: CardType }) => {
 
         {/* Image */}
         <CardItem translateZ="100" className="w-full mt-2 mb-4 shrink-0">
-          <Link href={`/startups/${id}`}>
+          <Link href={`/Startup/${id}`}>
             <img
               src={post.image ?? "/images/placeholder.png"}
               height="750"
@@ -144,7 +144,7 @@ const Card = ({ post }: { post: CardType }) => {
               hover:scale-105 transition-all duration-200 cursor-pointer
             "
           >
-            <Link href={`/startups/${id}`}>Details</Link>
+            <Link href={`/Startup/${id}`}>Details</Link>
           </CardItem>
         </div>
       </CardBody>

@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
       {/* ===== Hero Image ===== */}
       {post.image && (
-        <div className="max-w-5xl mx-auto mb-16 rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
+        <div className="max-w-5xl mx-auto mb-16 rounded-2xl overflow-hidden shadow-2xl border border-gray-800 relative hover:scale-110 transition-transform duration-300">
           <img
             src={post.image}
             alt={post.title}
@@ -107,8 +107,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <div className="border-t border-gray-800 pt-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           {/* Brand / Info */}
           <div>
-            <h3 className="text-xl font-bold text-yellow-400 tracking-tight">
-              Startup<span className="text-white">Showcase</span>
+            <h3 className="text-5xl font-bold text-yellow-400 tracking-tight">
+              Re<span className="text-white">coil</span>
             </h3>
             <p className="text-gray-400 text-sm mt-1">
               Empowering founders to share, grow, and inspire the world.

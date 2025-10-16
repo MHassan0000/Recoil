@@ -3,8 +3,8 @@ import { STARTUP_BY_VIEWS } from "@/sanity/lib/queries";
 import { Eye } from "lucide-react";
 
 export default async function View({ id }: { id: string }) {
-
-  const data = await client.fetch(
+  // Disable CDN to always get fresh dynamic data
+  const data = await client.withConfig({ useCdn: false }).fetch(
     STARTUP_BY_VIEWS,
     { id }
   );
@@ -12,8 +12,24 @@ export default async function View({ id }: { id: string }) {
   const views = data?.views || 0;
 
   return (
-    <span className="flex items-center gap-1 text-gray-400">
-      <Eye size={16} /> {views} views
+    <span
+      className="flex items-center gap-2 text-yellow-400 text-md font-semibold
+      transition-all duration-500 hover:text-yellow-300 group"
+    >
+      {/* Animated icon pulse to show dynamic activity */}
+      <Eye
+        size={20}
+        className="animate-pulse group-hover:scale-110 transition-transform duration-300"
+      />
+      
+      {/* Fading count to make it look “live” */}
+      <span className="relative inline-block">
+        <span
+          className="opacity-80 animate-[fadeIn_1s_ease-in-out] transition-opacity duration-300"
+        >
+          {views.toLocaleString()} views
+        </span>
+      </span>
     </span>
   );
 }

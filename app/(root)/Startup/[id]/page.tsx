@@ -4,6 +4,7 @@ import { STARTUP_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { notFound } from "next/navigation";
 import { CalendarDays } from "lucide-react";
 import View from "../../../components/View";
+import { Skeleton } from "@/app/components/skeleton";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -71,9 +72,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {/* ===== Dynamic Views via Suspense ===== */}
             <Suspense
               fallback={
-                <span className="animate-pulse text-gray-500 flex items-center gap-1">
-                  👁️ Loading views...
-                </span>
+                
+                <Skeleton className="h-5 w-24 rounded-md" />
               }
             >
               <View id={id} />

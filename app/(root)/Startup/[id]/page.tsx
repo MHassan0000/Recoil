@@ -1,12 +1,14 @@
-import React from "react";
-import Image from "next/image";
+import React, { Suspense } from "react";
 import { client } from "@/sanity/lib/client";
 import { STARTUP_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { notFound } from "next/navigation";
-import { CalendarDays, Eye } from "lucide-react";
+import { CalendarDays } from "lucide-react";
+import View from "../../../components/View";
 
-const page = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const id = (await params).id;
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
+  // Fetch startup details by ID
   const post = await client.fetch(STARTUP_BY_ID_QUERY, { id });
 
   if (!post) return notFound();
@@ -33,7 +35,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       {/* ===== Hero Image ===== */}
       {post.image && (
         <div className="max-w-5xl mx-auto mb-16 rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
-          {/* Use regular <img> instead of next/image */}
           <img
             src={post.image}
             alt={post.title}
@@ -66,9 +67,17 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
               <CalendarDays size={16} />{" "}
               {new Date(post._createdAt).toLocaleDateString()}
             </span>
-            <span className="flex items-center gap-1">
-              <Eye size={16} /> {post.views || 0} views
-            </span>
+
+            {/* ===== Dynamic Views via Suspense ===== */}
+            <Suspense
+              fallback={
+                <span className="animate-pulse text-gray-500 flex items-center gap-1">
+                  👁️ Loading views...
+                </span>
+              }
+            >
+              <View id={id} />
+            </Suspense>
           </div>
         </div>
 
@@ -80,7 +89,8 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             Startup Pitch
           </h2>
           <p className="text-gray-300 leading-relaxed whitespace-pre-line">
-            {post.pitch || "This startup has not provided a detailed pitch yet."}
+            {post.pitch ||
+              "This startup has not provided a detailed pitch yet."}
           </p>
         </div>
 
@@ -172,6 +182,4 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
       </footer>
     </section>
   );
-};
-
-export default page;
+}

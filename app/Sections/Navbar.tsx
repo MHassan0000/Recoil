@@ -93,7 +93,7 @@ export default function Navbar() {
             <span className="text-sm text-gray-300">Loading...</span>
           ) : session && session.user ? (
             <div className="flex items-center gap-4">
-              <Link href="/startup/create" className="text-sm hover:text-gray-300 auth-item">Create</Link>
+              <Link href="/Startup/Create" className="text-sm hover:text-gray-300 auth-item">Create</Link>
 
               <button
                 onClick={() => signOut()}
@@ -153,7 +153,7 @@ export default function Navbar() {
         <div className="mt-auto">
           {session && session.user ? (
             <>
-              <Link href="/startup/create" className="block mb-3">Create</Link>
+              <Link href="/Startup/Create" className="block mb-3">Create</Link>
               <button
                 onClick={() => signOut()}
                 className="w-full bg-red-600 hover:bg-red-700 py-2 rounded text-white mb-3"

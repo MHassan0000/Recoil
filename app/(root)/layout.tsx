@@ -1,5 +1,5 @@
 
-import Navbar from "../components/Navbar"
+import Navbar from "../Sections/Navbar"
 
 
 export default function Layout({

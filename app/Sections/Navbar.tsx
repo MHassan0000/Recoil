@@ -33,7 +33,7 @@ export default function Navbar() {
   }, [isOpen])
 
   const userId = (session as any)?.user?.id ?? (session as any)?.id ?? ""
-  const userImage = (session as any)?.user?.image || (session as any)?.user?.picture || null
+  const userImage = (session as any)?.user?.image  || null
 
   return (
     <header className="xl:py-4 py-2 w-full bg-black/80 backdrop-blur-md text-white shadow-md">
@@ -106,7 +106,7 @@ export default function Navbar() {
                 {userImage && (
                   <img
                     src={String(userImage)}
-                    alt="avatar"
+                    alt="User"
                     width={28}
                     height={28}
                     className="rounded-full object-cover"

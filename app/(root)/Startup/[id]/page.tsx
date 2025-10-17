@@ -4,7 +4,7 @@ import { STARTUP_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { notFound } from "next/navigation";
 import { CalendarDays } from "lucide-react";
 import View from "../../../components/View";
-import { Skeleton } from "@/app/components/skeleton";
+import { Skeleton } from "../../../components/Skeleton";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

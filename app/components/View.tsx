@@ -1,15 +1,18 @@
 import { client } from "@/sanity/lib/client";
 import { STARTUP_BY_VIEWS } from "@/sanity/lib/queries";
+import { writeClient } from "@/sanity/lib/write-client";
 import { Eye } from "lucide-react";
 
 export default async function View({ id }: { id: string }) {
   // Disable CDN to always get fresh dynamic data
-  const data = await client.withConfig({ useCdn: false }).fetch(
+  const  {views : Views} = await client.withConfig({ useCdn: false }).fetch(
     STARTUP_BY_VIEWS,
     { id }
   );
+  
 
-  const views = data?.views || 0;
+
+  writeClient.patch(id).setIfMissing({ views: 0 }).set({ views: Views + 1 }).commit();
 
   return (
     <span
@@ -27,7 +30,7 @@ export default async function View({ id }: { id: string }) {
         <span
           className="opacity-80 animate-[fadeIn_1s_ease-in-out] transition-opacity duration-300"
         >
-          {views.toLocaleString()} views
+          {Views} views
         </span>
       </span>
     </span>

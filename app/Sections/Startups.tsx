@@ -3,6 +3,7 @@ import Card, { CardType } from "../components/Card";
 import TitleHeader from "../components/TitleHeader";
 import { STARTUPS_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch ,SanityLive} from "@/sanity/lib/live";
+import { auth } from "@/auth";
 
 
 export default async function Startups({ query }: { query: string }) {
@@ -10,6 +11,8 @@ export default async function Startups({ query }: { query: string }) {
 
   const { data: Posts } = await sanityFetch({ query: STARTUPS_QUERY });
   const searchQuery = query?.trim().toLowerCase() || "";
+  const session = await auth();
+  console.log(session?.user?.id);
 
   //Filter for search
   const filteredPosts = searchQuery

@@ -10,13 +10,12 @@
     "predev": "npm run typegen",
     "prebuild": "npm run typegen",
     "typegen": "sanity schema extract --path=./sanity/extract.json && sanity typegen generate"
-    
   },
-  
   "dependencies": {
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.10.2",
     "@tailwindcss/typography": "^0.5.19",
+    "@uiw/react-md-editor": "^4.0.8",
     "clsx": "^2.1.1",
     "gsap": "^3.13.0",
     "lucide-react": "^0.545.0",

@@ -5,7 +5,8 @@ import { Send } from "lucide-react";
 import MDEditor from "@uiw/react-md-editor";
 import { formSchema } from "@/lib/validation";
 import { z } from "zod";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { createStartup } from "@/lib/actions";
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -24,12 +25,12 @@ const StartupForm = () => {
 
       await formSchema.parseAsync(formValues);
 
-      // const result = await creatIdea(prevState , formData , pitch);
-      // if(result.status === "SUCCESS"){
-      //   //Toast here
-      //    router.push(`/Startup/${result.id}`)
-      // }
-      // return result
+      const result = await createStartup(prevState , formData , pitch);
+      if(result.status === "SUCCESS"){
+        //Toast here
+         router.push(`/Startup/${result.id}`)
+      }
+      return result
       setErrors({});
       return { ...prevState, status: "SUCCESS", error: "" };
     } catch (error) {

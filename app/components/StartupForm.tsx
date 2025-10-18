@@ -154,7 +154,7 @@ const StartupForm = () => {
           <MDEditor
             id="pitch"
             value={pitch}
-            onChange={(value) => setPitch(value as string)}
+            onChange={(value) => setPitch(value?? "")}
             preview="edit"
             height={300}
             style={{ borderRadius: 20, overflow: "hidden" }}

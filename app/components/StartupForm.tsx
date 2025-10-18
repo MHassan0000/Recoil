@@ -1,32 +1,60 @@
 "use client";
 import React, { useState } from "react";
-import {  Send } from "lucide-react";
+import { useActionState } from "react";
+import { Send } from "lucide-react";
 import MDEditor from "@uiw/react-md-editor";
-
+import { formSchema } from "@/lib/validation";
+import { z } from "zod";
+import { useRouter } from "next/router";
 
 const StartupForm = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    category: "",
-    image: "",
-    pitch: "",
-  });
-
-  const [error, setError] = useState({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [pitch, setPitch] = useState("");
-  const isPending = false;
+  const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleFormSubmit = async (prevState: any, formData: FormData) => {
+    try {
+      const formValues = {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+        category: formData.get("category") as string,
+        image: formData.get("image") as string,
+        pitch: formData.get("pitch") as string,
+      };
+
+      await formSchema.parseAsync(formValues);
+
+      // const result = await creatIdea(prevState , formData , pitch);
+      // if(result.status === "SUCCESS"){
+      //   //Toast here
+      //    router.push(`/Startup/${result.id}`)
+      // }
+      // return result
+      setErrors({});
+      return { ...prevState, status: "SUCCESS", error: "" };
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors = error.flatten().fieldErrors;
+        setErrors(fieldErrors as unknown as Record<string, string>);
+        return {
+          ...prevState,
+          error: "Validation failed",
+          status: "ERROR",
+        };
+      }
+
+      return {
+        ...prevState,
+        error: "An unexpected error has occurred",
+        status: "ERROR",
+      };
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: connect with Sanity write client later
-    console.log("Form Submitted:", formData);
-  };
+  const [state, formAction, isPending] = useActionState(handleFormSubmit, {
+    error: "",
+    status: "INITIAL",
+  });
 
   return (
     <div className="max-w-2xl mx-auto bg-gradient-to-br from-zinc-900 to-zinc-800 text-white p-8 rounded-2xl shadow-2xl mt-10">
@@ -34,45 +62,57 @@ const StartupForm = () => {
         Create Your Startup
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form action={formAction} className="space-y-6">
         {/* Title */}
         <div>
-          <label htmlFor="title" className="block text-sm font-medium mb-2">Title</label>
+          <label htmlFor="title" className="block text-sm font-medium mb-2">
+            Title
+          </label>
           <input
             type="text"
             id="title"
             name="title"
-            value={formData.title}
-            onChange={handleChange}
             placeholder="Enter startup title..."
-            className="w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 ${
+              errors.title ? "ring-red-500" : "focus:ring-teal-500"
+            }`}
             required
           />
+          {errors.title && (
+            <p className="text-red-400 text-sm mt-1">{errors.title}</p>
+          )}
         </div>
 
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium mb-2">Description</label>
+          <label htmlFor="description" className="block text-sm font-medium mb-2">
+            Description
+          </label>
           <textarea
             id="description"
             name="description"
-            value={formData.description}
-            onChange={handleChange}
             placeholder="Describe your startup idea..."
-            className="w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-teal-500 h-28 resize-none"
+            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 ${
+              errors.description ? "ring-red-500" : "focus:ring-teal-500"
+            } h-28 resize-none`}
             required
           ></textarea>
+          {errors.description && (
+            <p className="text-red-400 text-sm mt-1">{errors.description}</p>
+          )}
         </div>
 
         {/* Category */}
         <div>
-          <label htmlFor="category" className="block text-sm font-medium mb-2">Category</label>
+          <label htmlFor="category" className="block text-sm font-medium mb-2">
+            Category
+          </label>
           <select
             id="category"
             name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 ${
+              errors.category ? "ring-red-500" : "focus:ring-teal-500"
+            }`}
             required
           >
             <option value="">Select category</option>
@@ -82,49 +122,65 @@ const StartupForm = () => {
             <option value="Finance">Finance</option>
             <option value="E-commerce">E-commerce</option>
           </select>
+          {errors.category && (
+            <p className="text-red-400 text-sm mt-1">{errors.category}</p>
+          )}
         </div>
 
-        {/* Image Upload */}
+        {/* Image */}
         <div>
-          <label htmlFor="image" className="block text-sm font-medium mb-2">Image</label>
-          <div className="flex items-center gap-3">
-            <input
-              
-              id="image"
-              name="image"
-              placeholder="Startup Image Url..."
-              className="w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              onChange={(e) => setFormData({ ...formData, image: e.target.files?.[0]?.name || "" })}
-            />
-          </div>
+          <label htmlFor="image" className="block text-sm font-medium mb-2">
+            Image
+          </label>
+          <input
+            id="image"
+            name="image"
+            placeholder="Startup Image URL..."
+            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 ${
+              errors.image ? "ring-red-500" : "focus:ring-teal-500"
+            }`}
+          />
+          {errors.image && (
+            <p className="text-red-400 text-sm mt-1">{errors.image}</p>
+          )}
         </div>
 
-        {/* Pitch (Markdown Input) */}
+        {/* Pitch */}
         <div data-color-mode="dark">
-          <label htmlFor="pitch" className="block text-sm font-medium mb-2">Pitch</label>
+          <label htmlFor="pitch" className="block text-sm font-medium mb-2">
+            Pitch
+          </label>
           <MDEditor
             id="pitch"
             value={pitch}
             onChange={(value) => setPitch(value as string)}
             preview="edit"
             height={300}
-            style={{borderRadius : 20 , overflow : "hidden"}}
-            className="w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-teal-500 h-36 resize-none font-mono"
+            style={{ borderRadius: 20, overflow: "hidden" }}
+            className={`w-full p-3 rounded-lg ${
+              errors.pitch ? "ring-2 ring-red-500" : "focus:ring-2 focus:ring-teal-500"
+            }`}
             textareaProps={{
-              placeholder : "Briefly describe your idea and the problem it solves..."
+              placeholder:
+                "Briefly describe your idea and the problem it solves...",
             }}
             previewOptions={{
-              disallowedElements : ["style"],
+              disallowedElements: ["style"],
             }}
           />
+          {errors.pitch && (
+            <p className="text-red-400 text-sm mt-1">{errors.pitch}</p>
+          )}
         </div>
 
-        {/* Submit Button */}
+        {/* Submit */}
         <button
           type="submit"
+          disabled={isPending}
           className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all duration-200"
         >
-          <Send size={20} /> Submit
+          <Send size={20} />
+          {isPending ? "Submitting..." : "Submit Startup"}
         </button>
       </form>
     </div>

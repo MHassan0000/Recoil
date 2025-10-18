@@ -3,6 +3,7 @@ import {Poppins, Geist, Geist_Mono } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import 'easymde/dist/easymde.min.css';
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +39,7 @@ export default function RootLayout({
         className={`antialiased`}
       >
         <SessionProvider>
-
+          <Toaster richColors position="top-center" />
           {children}
         </SessionProvider>
       </body>

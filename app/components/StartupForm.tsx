@@ -7,6 +7,7 @@ import { formSchema } from "@/lib/validation";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { createStartup } from "@/lib/actions";
+import { toast } from "sonner";
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -20,29 +21,40 @@ const StartupForm = () => {
         description: formData.get("description") as string,
         category: formData.get("category") as string,
         image: formData.get("image") as string,
-        pitch: formData.get("pitch") as string,
+        pitch: pitch,
       };
 
       await formSchema.parseAsync(formValues);
 
-      const result = await createStartup(prevState , formData , pitch);
-      if(result.status === "SUCCESS"){
-        //Toast here
-         router.push(`/Startup/${result.id}`)
+      const result = await createStartup(prevState, formData, pitch);
+
+      if (result.status === "SUCCESS") {
+        toast.success("🚀 Startup created successfully!", {
+          description: "Your startup has been published to the feed.",
+          duration: 4000,
+        });
+        router.push(`/Startup/${result.id}`);
       }
-      return result
+
       setErrors({});
       return { ...prevState, status: "SUCCESS", error: "" };
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
         setErrors(fieldErrors as unknown as Record<string, string>);
+        toast.error("⚠️ Validation failed", {
+          description: "Please check your inputs and try again.",
+        });
         return {
           ...prevState,
           error: "Validation failed",
           status: "ERROR",
         };
       }
+
+      toast.error("❌ Unexpected Error", {
+        description: "Something went wrong while creating your startup.",
+      });
 
       return {
         ...prevState,
@@ -58,7 +70,7 @@ const StartupForm = () => {
   });
 
   return (
-    <div className="max-w-2xl mx-auto bg-gradient-to-br from-zinc-900 to-zinc-800 text-white p-8 rounded-2xl shadow-2xl mt-10">
+    <div className="max-w-2xl mx-auto bg-gradient-to-br from-zinc-900 to-zinc-800 text-white p-8 rounded-2xl shadow-2xl mt-10 border border-zinc-700/40">
       <h2 className="text-3xl font-semibold mb-6 text-center bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
         Create Your Startup
       </h2>
@@ -154,7 +166,7 @@ const StartupForm = () => {
           <MDEditor
             id="pitch"
             value={pitch}
-            onChange={(value) => setPitch(value?? "")}
+            onChange={(value) => setPitch(value ?? "")}
             preview="edit"
             height={300}
             style={{ borderRadius: 20, overflow: "hidden" }}
@@ -178,7 +190,7 @@ const StartupForm = () => {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all duration-200"
+          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all duration-200 disabled:opacity-60"
         >
           <Send size={20} />
           {isPending ? "Submitting..." : "Submit Startup"}

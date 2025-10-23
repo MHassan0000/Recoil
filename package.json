@@ -11,9 +11,13 @@
     "prebuild": "npm run typegen",
     "typegen": "sanity schema extract --path=./sanity/extract.json && sanity typegen generate"
   },
+  "overrides": {
+    "next": "$next"
+  },
   "dependencies": {
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.10.2",
+    "@sentry/nextjs": "^10.21.0",
     "@tailwindcss/typography": "^0.5.19",
     "@uiw/react-md-editor": "^4.0.8",
     "clsx": "^2.1.1",

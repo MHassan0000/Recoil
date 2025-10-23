@@ -190,7 +190,7 @@ const StartupForm = () => {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all duration-200 disabled:opacity-60"
+          className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all duration-200 disabled:opacity-60 hover:scale-105"
         >
           <Send size={20} />
           {isPending ? "Submitting..." : "Submit Startup"}

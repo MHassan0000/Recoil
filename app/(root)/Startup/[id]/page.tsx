@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { CalendarDays } from "lucide-react";
 import View from "../../../components/View";
 import { Skeleton } from "../../../components/Skeleton";
+import Link from "next/link";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -45,22 +46,24 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       )}
 
       {/* ===== Details Section ===== */}
+      
       <div className="max-w-5xl mx-auto bg-[#171717] rounded-3xl shadow-lg p-8 md:p-12 border border-gray-800">
         <div className="flex flex-wrap items-center justify-between mb-6">
+
           {/* Author Info */}
-          <div className="flex items-center gap-4">
+          <Link href={`/User/${post.author?._id}`} className="flex items-center gap-4 ">
             {post.author?.image && (
               <img
                 src={post.author.image}
                 alt={post.author?.name}
-                className="w-[60px] h-[60px] rounded-full border-2 border-yellow-400 object-cover"
+                className="w-[60px] h-[60px] rounded-full border-2 border-yellow-400 object-cover cursor-pointer"
               />
             )}
             <div>
-              <h3 className="font-semibold text-lg">{post.author?.name}</h3>
+              <h3 className="font-semibold text-lg cursor-pointer">{post.author?.name}</h3>
               <p className="text-gray-400 text-sm">@{post.author?.username}</p>
             </div>
-          </div>
+          </Link>
 
           {/* Metadata */}
           <div className="flex items-center gap-6 text-gray-400 text-sm mt-4 md:mt-0">

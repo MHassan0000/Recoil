@@ -69,7 +69,7 @@ const Card = ({ post }: { post: CardType }) => {
             <div className="flex items-center justify-between w-full">
               {/* Left Side: Author */}
               <div className="flex items-center gap-3">
-                <Link href={`/user/${author._id}`} className="flex items-center gap-3">
+                <Link href={`/User/${author._id}`} className="flex items-center gap-3">
                   <img
                     src={author.image || "/images/client1.png"}
                     alt={author.name || "Author"}

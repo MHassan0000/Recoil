@@ -163,7 +163,7 @@ export default function Navbar() {
               {/* Avatar instead of Create Button */}
               <Link
                 href="/Startup/Create"
-                className="block mb-4 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-pink-800 hover:from-pink-800 hover:to-yellow-900 transition-all duration-300 shadow-lg hover:scale-105"
+                className=" mb-4 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-pink-800 hover:from-pink-800 hover:to-yellow-900 transition-all duration-300 shadow-lg hover:scale-105"
               >
                 <Plus className="w-2 h-2 text-white" />
               </Link>

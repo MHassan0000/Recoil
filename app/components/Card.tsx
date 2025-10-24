@@ -71,8 +71,8 @@ const Card = ({ post }: { post: CardType }) => {
               <div className="flex items-center gap-3">
                 <Link href={`/User/${author._id}`} className="flex items-center gap-3">
                   <img
-                    src={author.image || "/images/client1.png"}
-                    alt={author.name || "Author"}
+                    src={author.image ? author.image : "/images/user.png"}
+                    alt=""
                     className="w-8 h-8 rounded-full object-cover border border-white/30 hover:scale-105 transition-transform"
                   />
                   <span className="text-neutral-800 dark:text-neutral-200">

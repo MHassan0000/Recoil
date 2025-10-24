@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
       {/* ===== Hero Image ===== */}
       {post.image && (
-        <div className="max-w-5xl mx-auto mb-16 rounded-2xl overflow-hidden shadow-2xl border border-gray-800 relative hover:scale-110 transition-transform duration-300">
+        <div className="max-w-5xl mx-auto mb-16 rounded-2xl overflow-hidden shadow-2xl border border-gray-800 relative hover:scale-105 transition-transform duration-300">
           <img
             src={post.image}
             alt={post.title}

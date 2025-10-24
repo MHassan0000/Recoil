@@ -4,12 +4,15 @@ import { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import { useSession, signIn, signOut } from "next-auth/react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { Plus } from "lucide-react" // modern icon
 
 export default function Navbar() {
   const { data: session, status } = useSession()
   const navRef = useRef<HTMLDivElement | null>(null)
   const mobileMenuRef = useRef<HTMLDivElement | null>(null)
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter();
 
   // Entrance animation
   useEffect(() => {
@@ -33,11 +36,10 @@ export default function Navbar() {
   }, [isOpen])
 
   const userId = (session as any)?.user?.id ?? (session as any)?.id ?? ""
-  const userImage = (session as any)?.user?.image  || null
+  const userImage = (session as any)?.user?.image || null
 
   return (
     <header className="xl:py-4 py-2 w-full bg-black/80 backdrop-blur-md text-white shadow-md">
-
       <nav
         ref={navRef}
         className="w-full mx-auto px-6 py-4 flex items-center justify-between"
@@ -45,41 +47,34 @@ export default function Navbar() {
         {/* Logo */}
         <div className="logo flex items-center gap-3 cursor-pointer">
           <Link href={"/"}>
-            <img src="/images/infinity.png" alt="logo" className="w-[60px] xl:w-[75px]" /></Link>
-          <Link href={"/"}><span className="text-3xl xl:text-5xl font-bold  hover:text-gray-400">Recoil</span></Link>
-
+            <img src="/images/infinity.png" alt="logo" className="w-[60px] xl:w-[75px]" />
+          </Link>
+          <Link href={"/"}>
+            <span className="text-3xl xl:text-5xl font-bold hover:text-gray-400">Recoil</span>
+          </Link>
         </div>
 
         {/* Center links (desktop) */}
         <ul className={`hidden md:flex gap-8 text-lg xl:text-xl ${session ? "ml-10" : ""}`}>
           <li>
-            <Link
-              href="/"
-              className="relative group transition-all duration-300"
-            >
-              <span className="text-white transition-colors duration-300 group-hover:text-gray-200">
+            <Link href="/" className="relative group transition-all duration-300">
+              <span className="text-white group-hover:text-gray-200 transition-colors duration-300">
                 Home
               </span>
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-indigo-400 to-pink-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
             </Link>
           </li>
           <li>
-            <Link
-              href="/services"
-              className="relative group transition-all duration-300"
-            >
-              <span className="text-white transition-colors duration-300 group-hover:text-gray-200">
+            <Link href="/services" className="relative group transition-all duration-300">
+              <span className="text-white group-hover:text-gray-200 transition-colors duration-300">
                 Services
               </span>
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
             </Link>
           </li>
           <li>
-            <Link
-              href="/studio"
-              className="relative group transition-all duration-300"
-            >
-              <span className="text-white transition-colors duration-300 group-hover:text-gray-200">
+            <Link href="/studio" className="relative group transition-all duration-300">
+              <span className="text-white group-hover:text-gray-200 transition-colors duration-300">
                 Studio
               </span>
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-pink-500 to-yellow-400 transition-all duration-300 group-hover:w-full rounded-full"></span>
@@ -92,24 +87,36 @@ export default function Navbar() {
           {status === "loading" ? (
             <span className="text-sm text-gray-300">Loading...</span>
           ) : session && session.user ? (
-            <div className="flex items-center gap-4">
-              <Link href="/Startup/Create" className="text-sm hover:text-gray-300 auth-item">Create</Link>
+            <div className="flex items-center gap-5">
+              {/* Replaced Create Button with Avatar */}
+              <Link
+                href="/Startup/Create"
+                className="relative group flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-pink-500 hover:from-pink-500 hover:to-yellow-400 transition-all duration-300 shadow-lg hover:scale-110"
+              >
+                <Plus className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-300" />
+              </Link>
 
               <button
-                onClick={() => signOut()}
+                onClick={async () => {
+                  await signOut({ redirect: false });
+                  router.push("/");
+                }}
                 className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full text-sm"
               >
                 Logout
               </button>
 
-              <Link href={`/user/${encodeURIComponent(String(userId))}`} className="flex items-center gap-2 auth-item hover:opacity-90">
+              <Link
+                href={`/User/${encodeURIComponent(String(userId))}`}
+                className="flex items-center gap-2 auth-item hover:opacity-90"
+              >
                 {userImage && (
                   <img
-                    src={String(userImage)}
-                    alt="User"
+                    src={String(userImage) ? String(userImage) : "/images/user.png"}
+                    alt=""
                     width={28}
                     height={28}
-                    className="rounded-full object-cover"
+                    className="rounded-full object-cover filter-invert"
                   />
                 )}
                 <span className="text-sm">{session.user?.name ?? "User"}</span>
@@ -117,7 +124,7 @@ export default function Navbar() {
             </div>
           ) : (
             <button
-              onClick={() => signIn()} // opens NextAuth provider selection modal
+              onClick={() => signIn()}
               className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full text-sm"
             >
               Login
@@ -153,14 +160,25 @@ export default function Navbar() {
         <div className="mt-auto">
           {session && session.user ? (
             <>
-              <Link href="/Startup/Create" className="block mb-3">Create</Link>
+              {/* Avatar instead of Create Button */}
+              <Link
+                href="/Startup/Create"
+                className="block mb-4 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-pink-500 hover:from-pink-500 hover:to-yellow-400 transition-all duration-300 shadow-lg hover:scale-110"
+              >
+                <Plus className="w-5 h-5 text-white" />
+              </Link>
+
               <button
                 onClick={() => signOut()}
                 className="w-full bg-red-600 hover:bg-red-700 py-2 rounded text-white mb-3"
               >
                 Logout
               </button>
-              <Link href={`/user/${encodeURIComponent(String(userId))}`} className="flex items-center gap-3">
+
+              <Link
+                href={`/user/${encodeURIComponent(String(userId))}`}
+                className="flex items-center gap-3"
+              >
                 {userImage && (
                   <img
                     src={String(userImage)}
@@ -175,7 +193,7 @@ export default function Navbar() {
             </>
           ) : (
             <button
-              onClick={() => signIn()} // same modal for both Google & GitHub
+              onClick={() => signIn()}
               className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-white"
             >
               Login

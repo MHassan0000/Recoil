@@ -5,7 +5,7 @@ import gsap from "gsap"
 import { useSession, signIn, signOut } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Plus } from "lucide-react" // modern icon
+import { Plus, Bookmark } from "lucide-react" // added Bookmark icon
 
 export default function Navbar() {
   const { data: session, status } = useSession()
@@ -83,12 +83,21 @@ export default function Navbar() {
         </ul>
 
         {/* Auth area (desktop) */}
-        <div className="hidden md:flex items-center gap-4 auth-item">
+        <div className="hidden md:flex items-center gap-5 auth-item">
           {status === "loading" ? (
             <span className="text-sm text-gray-300">Loading...</span>
           ) : session && session.user ? (
             <div className="flex items-center gap-5">
-              {/* Replaced Create Button with Avatar */}
+              {/* Bookmark Button */}
+              <Link
+                href={`/Bookmark/${encodeURIComponent(String(userId))}`}
+                className="relative group flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-400 to-orange-500 hover:from-orange-500 hover:to-yellow-400 transition-all duration-300 shadow-lg hover:scale-110"
+                title="Bookmarks"
+              >
+                <Bookmark className="w-5 h-5 text-black group-hover:text-white transition-colors duration-300" />
+              </Link>
+
+              {/* Create Button */}
               <Link
                 href="/Startup/Create"
                 className="relative group flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-pink-500 hover:from-pink-500 hover:to-yellow-400 transition-all duration-300 shadow-lg hover:scale-110"
@@ -160,10 +169,18 @@ export default function Navbar() {
         <div className="mt-auto">
           {session && session.user ? (
             <>
-              {/* Avatar instead of Create Button */}
+              {/* Bookmark Button (Mobile) */}
+              <Link
+                href={`/Bookmark/${encodeURIComponent(String(userId))}`}
+                className="flex items-center justify-start gap-3 py-2 text-yellow-400 hover:text-yellow-500 transition-colors mb-3"
+              >
+                <Bookmark className="w-5 h-5" />
+                <span>Bookmarks</span>
+              </Link>
+
               <Link
                 href="/Startup/Create"
-                className=" mb-4 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-pink-800 hover:from-pink-800 hover:to-yellow-900 transition-all duration-300 shadow-lg hover:scale-105"
+                className="mb-4 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-pink-800 hover:from-pink-800 hover:to-yellow-900 transition-all duration-300 shadow-lg hover:scale-105"
               >
                 <Plus className="w-2 h-2 text-white" />
               </Link>
@@ -176,7 +193,7 @@ export default function Navbar() {
               </button>
 
               <Link
-                href={`/user/${encodeURIComponent(String(userId))}`}
+                href={`/User/${encodeURIComponent(String(userId))}`}
                 className="flex items-center gap-3"
               >
                 {userImage && (

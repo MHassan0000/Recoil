@@ -1,13 +1,16 @@
+"use client";
 import React from "react";
 import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 import { formatDate } from "@/lib/utils";
 import { Startup, Author } from "../../sanity/types";
 import Link from "next/link";
-
+import { useSession, signIn } from "next-auth/react";
+import { toast } from "sonner"; // if you already use it, else use alert()
 
 export type CardType = Omit<Startup, "author"> & { author?: Author };
 
 const Card = ({ post }: { post: CardType }) => {
+  const { data: session } = useSession();
   const id = post._id ?? "";
   const title = post.title ?? "";
   const subtext = post.description ?? "";
@@ -15,6 +18,15 @@ const Card = ({ post }: { post: CardType }) => {
   const date = post._createdAt ?? "";
   const views = post.views ?? 0;
   const author = post.author ?? undefined;
+
+  
+  const handleBookmarkClick = () => {
+    if (!session) {
+      toast ? toast.info("Please log in to bookmark startups.") : alert("Please log in to bookmark startups.");
+      return;
+    }
+   
+  };
 
   return (
     <CardContainer>
@@ -34,8 +46,12 @@ const Card = ({ post }: { post: CardType }) => {
           <div className="text-lg text-center py-2 px-4 rounded-full bg-orange-500 text-white">
             {formatDate(date)}
           </div>
+
           {/* Bookmark */}
-          <div className="invert cursor-pointer hover:scale-105 transition-transform">
+          <div
+            className="invert cursor-pointer hover:scale-105 transition-transform"
+            onClick={handleBookmarkClick}
+          >
             <img width={30} src="/images/bookmark.png" alt="bookmark" />
           </div>
         </div>
@@ -53,7 +69,7 @@ const Card = ({ post }: { post: CardType }) => {
           as="p"
           translateZ="30"
           className="
-            text-neutral-500 text-sm mt-2  dark:text-neutral-300 leading-relaxed
+            text-neutral-500 text-sm mt-2 dark:text-neutral-300 leading-relaxed
             line-clamp-3 overflow-hidden
           "
         >
@@ -67,7 +83,6 @@ const Card = ({ post }: { post: CardType }) => {
         >
           {author?._id ? (
             <div className="flex items-center justify-between w-full">
-              {/* Left Side: Author */}
               <div className="flex items-center gap-3">
                 <Link href={`/User/${author._id}`} className="flex items-center gap-3">
                   <img
@@ -81,7 +96,6 @@ const Card = ({ post }: { post: CardType }) => {
                 </Link>
               </div>
 
-              {/* Right Side: Category */}
               <Link href={`/?query=${category?.toLowerCase()}`}>
                 <p className="text-sm font-bold dark:text-neutral-500">{category}</p>
               </Link>

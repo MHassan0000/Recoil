@@ -14,7 +14,19 @@ export const author = defineType({
     defineField({ name: "email", type: "string" }),
     defineField({ name: "image", type: "url" }),
     defineField({ name: "bio", type: "text" }),
+     defineField({
+      name: "bookmarks",
+      title: "Bookmarks",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "startup" }],
+        },
+      ],
+    }),
   ],
+  
   preview:{
     select : {
         title: 'name',

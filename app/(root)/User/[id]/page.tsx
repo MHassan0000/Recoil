@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </div>
 
             {/* ===== Profile Card ===== */}
-            <div className="max-w-4xl mx-auto bg-[#171717]/60 backdrop-blur-md rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-800/60 hover:border-yellow-400/40 transition-all duration-300 relative z-10">
+            <div className="max-w-7xl mx-auto bg-[#171717]/60 backdrop-blur-md rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-800/60 hover:border-yellow-400/40 transition-all duration-300 relative z-10">
                 <div className="flex flex-col md:flex-row items-center gap-10">
                     {/* Profile Image */}
                     <div className="relative group">
@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
                 {/* ===== User's Startups Section ===== */}
                 <div>
-                    <h3 className="text-2xl font-bold text-yellow-400 mb-8 text-center md:text-left">
+                    <h3 className="text-3xl  font-extrabold text-yellow-400 mb-8 text-center ">
                         {user.name}'s Startups
                     </h3>
                     <Suspense fallback={<Skeleton className="h-8 w-48 rounded-md" />}>

@@ -5,12 +5,16 @@ import { formatDate } from "@/lib/utils";
 import { Startup, Author } from "../../sanity/types";
 import Link from "next/link";
 import { useSession, signIn } from "next-auth/react";
-import { toast } from "sonner"; // if you already use it, else use alert()
+import { toast } from "sonner";
+import { toggleBookmark } from "@/lib/actions"; // adjust import path if needed
 
 export type CardType = Omit<Startup, "author"> & { author?: Author };
 
 const Card = ({ post }: { post: CardType }) => {
   const { data: session } = useSession();
+
+  const userId: string | null =
+    (session as any)?.user?.id ?? (session as any)?.id ?? null;
   const id = post._id ?? "";
   const title = post.title ?? "";
   const subtext = post.description ?? "";
@@ -19,13 +23,27 @@ const Card = ({ post }: { post: CardType }) => {
   const views = post.views ?? 0;
   const author = post.author ?? undefined;
 
-  
-  const handleBookmarkClick = () => {
-    if (!session) {
-      toast ? toast.info("Please log in to bookmark startups.") : alert("Please log in to bookmark startups.");
+  const handleBookmarkClick = async () => {
+    if (!session || !userId) {
+      toast.info("Please log in to bookmark startups.");
       return;
     }
-   
+
+    try {
+      const result = await toggleBookmark(userId, id);
+      if (result?.success) {
+        toast.success(
+          result.isBookmarked
+            ? "Added to your bookmarks!"
+            : "Removed from your bookmarks!"
+        );
+      } else {
+        toast.error("Something went wrong while toggling bookmark.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An unexpected error occurred.");
+    }
   };
 
   return (

@@ -46,19 +46,17 @@ export const createStartup = async (state : any , form: FormData, pitch: string)
 
 }
 export async function toggleBookmark(userId: string, startupId: string) {
-  
   try {
     if (!userId || !startupId) {
       return { success: false, message: "Missing IDs" };
     }
 
-    // First attempt: assume userId is the Sanity document _id
+    
     let user = await client.fetch(
       `*[_type == "author" && _id == $userId][0]{_id, bookmarks[]-> {_id}}`,
       { userId }
     );
 
-    // If not found, try treating userId as the external id (e.g. GitHub id stored in `id`)
     if (!user) {
       const possible = await client.fetch(
         `*[_type == "author" && id == $userId][0]{_id, bookmarks[]-> {_id}}`,
@@ -81,8 +79,8 @@ export async function toggleBookmark(userId: string, startupId: string) {
         .unset([`bookmarks[_ref=="${startupId}"]`])
         .commit();
 
-        return {removed : true};
-        
+      
+      return { success: true, removed: true, isBookmarked: false };
     } else {
       // Add bookmark
       await writeClient
@@ -90,9 +88,10 @@ export async function toggleBookmark(userId: string, startupId: string) {
         .setIfMissing({ bookmarks: [] })
         .append("bookmarks", [{ _type: "reference", _ref: startupId }])
         .commit();
-    }
 
-    return { success: true, isBookmarked: !isBookmarked };
+     
+      return { success: true, removed: false, isBookmarked: true };
+    }
   } catch (error) {
     console.error("Bookmark toggle failed:", error);
     return { success: false, message: String(error) };

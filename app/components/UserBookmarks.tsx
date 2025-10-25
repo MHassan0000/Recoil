@@ -12,13 +12,14 @@ const UserBookmarks = async ({ id, authorName }: UserBookmarksProps) => {
   
   const bookmarksData = await client.fetch(BOOKMARKS_BY_AUTHOR_ID_QUERY, { id });
   const bookmarks = bookmarksData?.bookmarks || [];
+  
 
   return (
     <>
       {bookmarks.length > 0 ? (
         <div className="flex flex-wrap justify-center items-center mt-5 gap-10">
           {bookmarks.map((startup: CardType) => (
-            <Card key={startup._id} post={startup} />
+            <Card key={startup._id} post={{ ...startup, isBookmarked: true }} />
           ))}
         </div>
       ) : (

@@ -40,12 +40,19 @@ export type Author = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  id?: number;
+  id?: string;
   name?: string;
   username?: string;
   email?: string;
   image?: string;
   bio?: string;
+  bookmarks?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "startup";
+  }>;
 };
 
 export type Markdown = string;

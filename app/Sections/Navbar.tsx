@@ -61,7 +61,7 @@ export default function Navbar() {
               <span className="text-white group-hover:text-gray-200 transition-colors duration-300">
                 Home
               </span>
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-indigo-400 to-pink-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </Link>
           </li>
           <li>
@@ -69,7 +69,7 @@ export default function Navbar() {
               <span className="text-white group-hover:text-gray-200 transition-colors duration-300">
                 Services
               </span>
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-300 group-hover:w-full rounded-full"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </Link>
           </li>
           <li>
@@ -77,7 +77,7 @@ export default function Navbar() {
               <span className="text-white group-hover:text-gray-200 transition-colors duration-300">
                 Studio
               </span>
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-pink-500 to-yellow-400 transition-all duration-300 group-hover:w-full rounded-full"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </Link>
           </li>
         </ul>

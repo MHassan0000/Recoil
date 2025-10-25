@@ -30,7 +30,7 @@ export default async function Page({
 
       {/* ===== Bookmarked Cards Section ===== */}
       <div className="max-w-6xl mx-auto">
-        <UserBookmarks id={id} authorName={author.name || "You"} />
+        <UserBookmarks id={id} authorName={author?.name} />
       </div>
 
       {/* ===== Footer Accent ===== */}

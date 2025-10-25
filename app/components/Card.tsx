@@ -6,12 +6,14 @@ import { Startup, Author } from "../../sanity/types";
 import Link from "next/link";
 import { useSession, signIn } from "next-auth/react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { toggleBookmark } from "@/lib/actions"; // adjust import path if needed
 
 export type CardType = Omit<Startup, "author"> & { author?: Author };
 
 const Card = ({ post }: { post: CardType }) => {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const userId: string | null =
     (session as any)?.user?.id ?? (session as any)?.id ?? null;
@@ -27,6 +29,8 @@ const Card = ({ post }: { post: CardType }) => {
     if (!session || !userId) {
       toast.info("Please log in to bookmark startups.");
       return;
+
+
     }
 
     try {
@@ -37,9 +41,14 @@ const Card = ({ post }: { post: CardType }) => {
             ? "Added to your bookmarks!"
             : "Removed from your bookmarks!"
         );
+
+      } else if (result?.removed) {
+        toast.success("Removed from your bookmarks!");
+        router.refresh();
       } else {
         toast.error("Something went wrong while toggling bookmark.");
       }
+     
     } catch (error) {
       console.error(error);
       toast.error("An unexpected error occurred.");

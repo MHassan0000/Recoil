@@ -2,7 +2,6 @@
 import {auth }from "@/auth";
 import { parseServerActionResponse } from "./utils";
 import { client } from "@/sanity/lib/client";
-import { AUTHOR_BY_ID_QUERY } from "@/sanity/lib/queries";
 import slugify from "slugify";
 import { writeClient } from "@/sanity/lib/write-client";
 
@@ -47,29 +46,47 @@ export const createStartup = async (state : any , form: FormData, pitch: string)
 
 }
 export async function toggleBookmark(userId: string, startupId: string) {
+  
   try {
     if (!userId || !startupId) {
       return { success: false, message: "Missing IDs" };
     }
-    
-    // ✅ Use read client here
-    const user = await client.fetch(
-      `*[_type == "author" && _id == $userId][0]{bookmarks[]-> {_id}}`,
+
+    // First attempt: assume userId is the Sanity document _id
+    let user = await client.fetch(
+      `*[_type == "author" && _id == $userId][0]{_id, bookmarks[]-> {_id}}`,
       { userId }
     );
 
+    // If not found, try treating userId as the external id (e.g. GitHub id stored in `id`)
+    if (!user) {
+      const possible = await client.fetch(
+        `*[_type == "author" && id == $userId][0]{_id, bookmarks[]-> {_id}}`,
+        { userId }
+      );
+      user = possible;
+    }
+
+    if (!user) {
+      return { success: false, message: "User not found" };
+    }
+
+    const sanityUserId = user._id;
     const isBookmarked = user?.bookmarks?.some((b: any) => b._id === startupId);
 
     if (isBookmarked) {
-      // ✅ Remove bookmark
+      // Remove bookmark
       await writeClient
-        .patch(userId)
+        .patch(sanityUserId)
         .unset([`bookmarks[_ref=="${startupId}"]`])
         .commit();
+
+        return {removed : true};
+        
     } else {
-      // ✅ Add bookmark
+      // Add bookmark
       await writeClient
-        .patch(userId)
+        .patch(sanityUserId)
         .setIfMissing({ bookmarks: [] })
         .append("bookmarks", [{ _type: "reference", _ref: startupId }])
         .commit();

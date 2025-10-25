@@ -9,14 +9,14 @@ interface UserBookmarksProps {
 }
 
 const UserBookmarks = async ({ id, authorName }: UserBookmarksProps) => {
-  // Fetch bookmarked startups for the given user
+  
   const bookmarksData = await client.fetch(BOOKMARKS_BY_AUTHOR_ID_QUERY, { id });
   const bookmarks = bookmarksData?.bookmarks || [];
 
   return (
     <>
       {bookmarks.length > 0 ? (
-        <div className="grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-wrap justify-center items-center mt-5 gap-10">
           {bookmarks.map((startup: CardType) => (
             <Card key={startup._id} post={startup} />
           ))}

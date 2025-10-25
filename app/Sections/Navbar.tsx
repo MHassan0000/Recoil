@@ -100,9 +100,9 @@ export default function Navbar() {
               {/* Create Button */}
               <Link
                 href="/Startup/Create"
-                className="relative group flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-pink-500 hover:from-pink-500 hover:to-yellow-400 transition-all duration-300 shadow-lg hover:scale-110"
+                className="relative group flex items-center justify-center w-10 h-10 rounded-full bg-white transition-all duration-300 shadow-lg hover:scale-110"
               >
-                <Plus className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-300" />
+                <Plus className="w-5 h-5 text-black group-hover:rotate-90 transition-transform duration-300" />
               </Link>
 
               <button
@@ -110,7 +110,10 @@ export default function Navbar() {
                   await signOut({ redirect: false });
                   router.push("/");
                 }}
-                className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full text-sm"
+                className="px-5 bg-gradient-to-r from-red-600 to-red-700 text-white font-medium py-2 rounded-xl
+             shadow-md shadow-red-900/50 hover:shadow-lg hover:shadow-red-700/60
+             hover:from-red-500 hover:to-red-600 transform hover:-translate-y-[1px]
+             transition-all duration-300"
               >
                 Logout
               </button>
@@ -134,10 +137,14 @@ export default function Navbar() {
           ) : (
             <button
               onClick={() => signIn()}
-              className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full text-sm"
+              className="px-5 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium py-2 rounded-xl
+             shadow-md shadow-blue-900/50 hover:shadow-lg hover:shadow-blue-700/60
+             hover:from-blue-500 hover:to-blue-600 transform hover:-translate-y-[1px]
+             transition-all duration-300"
             >
               Login
             </button>
+
           )}
         </div>
 
@@ -180,13 +187,16 @@ export default function Navbar() {
 
               <Link
                 href="/Startup/Create"
-                className="mb-4 w-5 h-5 flex items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-pink-800 hover:from-pink-800 hover:to-yellow-900 transition-all duration-300 shadow-lg hover:scale-105"
+                className="mb-4 w-5 h-5 flex items-center justify-center rounded-full transition-all duration-300 shadow-lg hover:scale-105"
               >
-                <Plus className="w-2 h-2 text-white" />
+                <Plus className="w-2 h-2 text-black" />
               </Link>
 
               <button
-                onClick={() => signOut()}
+                onClick={async () => {
+                  await signOut({ redirect: false });
+                  router.push("/");
+                }}
                 className="w-full bg-red-600 hover:bg-red-700 py-2 rounded text-white mb-3"
               >
                 Logout

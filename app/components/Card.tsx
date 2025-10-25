@@ -96,7 +96,7 @@ const Card = ({ post }: { post: CardType }) => {
           <button
             onClick={handleBookmarkClick}
             disabled={isPending}
-            className={`p-2 rounded-full transition-all duration-300 ${
+            className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
               isBookmarked
                 ? "text-yellow-400 hover:text-yellow-500 bg-yellow-400/10"
                 : "text-gray-400 hover:text-gray-300"

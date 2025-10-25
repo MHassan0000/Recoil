@@ -5,7 +5,7 @@ import gsap from "gsap"
 import { useSession, signIn, signOut } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Plus, Bookmark } from "lucide-react" // added Bookmark icon
+import { Plus, Bookmark } from "lucide-react"
 
 export default function Navbar() {
   const { data: session, status } = useSession()
@@ -14,7 +14,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter();
 
-  // Entrance animation
+  
   useEffect(() => {
     if (!navRef.current) return
     const items = navRef.current.querySelectorAll("li, .logo, .auth-item, .menu-btn")

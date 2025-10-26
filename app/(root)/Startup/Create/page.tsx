@@ -13,8 +13,8 @@ const Page = async () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(234,179,8,0.15),transparent_70%)] pointer-events-none" />
 
       {/* ====== Header ====== */}
-      <div className="text-center max-w-3xl mb-14 z-10">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
+      <div className="text-center md:mt-20 mt-10 max-w-3xl mb-14 z-10">
+        <h1 className="text-4xl  md:text-6xl font-extrabold tracking-tight mb-4">
           <span className="text-yellow-400">Submit</span> Your Startup
         </h1>
         <p className="text-gray-400 text-lg">

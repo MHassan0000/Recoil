@@ -89,7 +89,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      <nav
+      <section
         ref={navRef}
         className="w-full py-5 bg-black/90 backdrop-blur-md border-b border-black/40 text-white"
         aria-label="Main Navigation"
@@ -200,7 +200,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-      </nav>
+      </section>
 
       {/* Overlay */}
       <div
@@ -229,11 +229,11 @@ export default function Navbar() {
           </button>
         </div>
 
-        <nav className="flex flex-col gap-4 text-lg mb-6">
+        <section className="flex flex-col gap-4 text-lg mb-6">
           <Link href="/" onClick={() => setOpen(false)} className="py-2">Home</Link>
           <Link href="/services" onClick={() => setOpen(false)} className="py-2">Services</Link>
           <Link href="/Contact" onClick={() => setOpen(false)} className="py-2">Contact</Link>
-        </nav>
+        </section>
 
         <div className="mt-auto pt-6 border-t border-gray-800">
           {session?.user ? (

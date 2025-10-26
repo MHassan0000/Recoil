@@ -20,7 +20,7 @@ export default function Footer() {
             <img src="/images/infinity.png" alt="Recoil Logo" className="w-10 h-10" />
             <h2 className="text-2xl font-bold text-white">Recoil</h2>
           </div>
-          <p className="text-gray-400 text-sm text-left leading-relaxed max-w-xs">
+          <p className="text-gray-400 text-sm text-left sm:text-center leading-relaxed max-w-xs">
             Recoil connects startups and innovators worldwide — helping you share, discover, and grow together.
           </p>
         </div>

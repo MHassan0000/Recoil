@@ -80,19 +80,19 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
+    <header className="">
       <section
         ref={navRef}
         className="w-full xl:py-5 py-2 bg-black/90 backdrop-blur-md border-b border-black/40 text-white"
         aria-label="Main Navigation"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="h-16 flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center gap-3">
               <Link href="/" className="flex items-center gap-3 logo">
                 <img src="/images/infinity.png" alt="Recoil" className="w-9 h-9 md:w-10 md:h-10" />
-                <span className="font-bold text-xl md:text-2xl">Recoil</span>
+                <span className="font-bold text-xl md:text-3xl">Recoil</span>
               </Link>
             </div>
 
@@ -197,7 +197,7 @@ export default function Navbar() {
               ) : (
                 <motion.button
                   onClick={() => signIn()}
-                  className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm"
+                  className="px-6 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -287,7 +287,7 @@ export default function Navbar() {
 
               <button
                 onClick={handleSignOut}
-                className="w-full mt-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white"
+                className="w-full mt-4 py-2 px-6 rounded-md bg-red-600 hover:bg-red-700 text-white"
               >
                 Logout
               </button>

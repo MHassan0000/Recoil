@@ -13,7 +13,7 @@ export default function Hero({ query }: { query: string }) {
       {/* Foreground Content */}
   <div className="absolute z-20 flex flex-col items-center text-center text-white px-4 sm:px-6 lg:px-0 max-w-5xl">
         {/* Top Tag */}
-        <div className="bg-yellow-400 text-black font-bold my-4 mt-20 text-xs sm:text-sm tracking-wide uppercase px-4 sm:px-6 py-2 rounded-md shadow-md mb-4">
+        <div className="bg-yellow-400 text-black font-bold my-4 text-xs sm:text-sm tracking-wide uppercase px-4 sm:px-6 py-2 rounded-md shadow-md mb-4">
           Pitch, Vote and Grow
         </div>
 
@@ -36,8 +36,8 @@ export default function Hero({ query }: { query: string }) {
         
 
 
-          <div className="w-full px-2 sm:px-0 flex justify-center">
-            <div className="w-full max-w-2xl  mx-auto">
+          <div className="w-full px-2 sm:px-0 flex">
+            <div className="w-full max-w-3xl  mx-auto">
               <SearchForm />
             </div>
           </div>

@@ -6,6 +6,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Plus, Bookmark, X } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -16,14 +17,12 @@ export default function Navbar() {
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(false);
 
-  // Ensure drawer width is compact on small phones (iPhone 12 ~ 390px viewport)
   const getDrawerWidth = () => {
     if (typeof window === "undefined") return 280;
-    const w = Math.min(320, Math.floor(window.innerWidth * 0.78)); // max 320px, otherwise 78%
-    return Math.max(260, w); // at least 260px
+    const w = Math.min(320, Math.floor(window.innerWidth * 0.78));
+    return Math.max(260, w);
   };
 
-  // Entrance animation for desktop nav items
   useEffect(() => {
     if (!navRef.current) return;
     const items = navRef.current.querySelectorAll(".nav-item, .logo, .auth-item");
@@ -34,13 +33,10 @@ export default function Navbar() {
     );
   }, []);
 
-  // Drawer open/close animation & focus trap basics
   useEffect(() => {
     if (!drawerRef.current || !overlayRef.current) return;
-
     const width = getDrawerWidth();
-    gsap.set(drawerRef.current, { x: width, width }); // start off-screen (to the right)
-
+    gsap.set(drawerRef.current, { x: width, width });
     const tl = gsap.timeline({ paused: true });
     tl.to(overlayRef.current, { autoAlpha: 1, duration: 0.18, ease: "power1.out" }, 0);
     tl.to(drawerRef.current, { x: 0, duration: 0.36, ease: "power3.out" }, 0);
@@ -48,7 +44,6 @@ export default function Navbar() {
     if (open) {
       tl.play();
       document.body.style.overflow = "hidden";
-      // set focus to first link inside drawer for a11y
       const first = drawerRef.current.querySelector<HTMLElement>("a,button");
       first?.focus();
     } else {
@@ -56,14 +51,12 @@ export default function Navbar() {
       document.body.style.overflow = "auto";
     }
 
-    // cleanup on unmount
     return () => {
       document.body.style.overflow = "auto";
       tl.kill();
     };
   }, [open]);
 
-  // Close on ESC
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" && open) setOpen(false);
@@ -81,7 +74,6 @@ export default function Navbar() {
     setOpen(false);
   };
 
-  // helper to handle navigation from drawer (closes drawer)
   const handleNavClick = (href: string) => {
     setOpen(false);
     router.push(href);
@@ -128,38 +120,74 @@ export default function Navbar() {
               </li>
             </ul>
 
-            {/* Desktop auth area */}
-            <div className="hidden md:flex items-center gap-4 auth-item">
+            {/* === DESKTOP AUTH AREA WITH ANIMATIONS === */}
+            <motion.div
+              className="hidden md:flex items-center gap-4 auth-item"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
               {status === "loading" ? (
                 <span className="text-sm text-gray-300">Loading...</span>
               ) : session?.user ? (
                 <div className="flex items-center gap-4">
-                  <Link
-                    href={`/Bookmark/${encodeURIComponent(String(userId))}`}
-                    className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-tr from-yellow-400 to-orange-500 shadow"
-                    title="Bookmarks"
+                  {/* Bookmark Icon Button */}
+                  <motion.div
+                    whileHover={{ scale: 1.2, rotate: 12 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 250 }}
                   >
-                    <Bookmark className="w-5 h-5 text-black" />
-                  </Link>
+                    <Link
+                      href={`/Bookmark/${encodeURIComponent(String(userId))}`}
+                      className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-tr from-yellow-400 to-orange-500 shadow"
+                      title="Bookmarks"
+                    >
+                      <Bookmark className="w-5 h-5 text-black" />
+                    </Link>
+                  </motion.div>
 
-                  <Link
-                    href="/Startup/Create"
-                    className="w-10 h-10 rounded-full flex items-center justify-center bg-white shadow"
-                    title="Create"
+                  {/* Add Icon Button */}
+                  <motion.div
+                    whileHover={{ rotate: 90, scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 250 }}
                   >
-                    <Plus className="w-5 h-5 text-black" />
-                  </Link>
+                    <Link
+                      href="/Startup/Create"
+                      className="w-10 h-10 rounded-full flex items-center justify-center bg-white shadow"
+                      title="Create"
+                    >
+                      <Plus className="w-5 h-5 text-black" />
+                    </Link>
+                  </motion.div>
 
-                  <button
+                  {/* Logout Button */}
+                  <motion.button
                     onClick={handleSignOut}
                     className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white font-medium text-sm"
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 0 10px rgba(255, 60, 60, 0.6)",
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 200 }}
                   >
                     Logout
-                  </button>
+                  </motion.button>
 
-                  <Link href={`/User/${encodeURIComponent(String(userId))}`} className="flex items-center gap-2">
+                  {/* User Profile */}
+                  <Link
+                    href={`/User/${encodeURIComponent(String(userId))}`}
+                    className="flex items-center gap-2 hover:opacity-90 transition"
+                  >
                     {userImage ? (
-                      <img src={String(userImage)} alt="User" className="w-8 h-8 rounded-full object-cover" />
+                      <motion.img
+                        src={String(userImage)}
+                        alt="User"
+                        className="w-8 h-8 rounded-full object-cover"
+                        whileHover={{ scale: 1.1, rotate: 3 }}
+                        transition={{ duration: 0.3 }}
+                      />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-white/10" />
                     )}
@@ -167,16 +195,18 @@ export default function Navbar() {
                   </Link>
                 </div>
               ) : (
-                <button
+                <motion.button
                   onClick={() => signIn()}
                   className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Login
-                </button>
+                </motion.button>
               )}
-            </div>
+            </motion.div>
 
-            {/* Mobile hamburger (solid black circle background) */}
+            {/* === MOBILE SECTION (UNCHANGED) === */}
             <div className="md:hidden flex items-center">
               <button
                 aria-label={open ? "Close menu" : "Open menu"}
@@ -184,7 +214,6 @@ export default function Navbar() {
                 onClick={() => setOpen((v) => !v)}
                 className="w-10 h-10 rounded-full bg-black shadow flex items-center justify-center border border-white/6"
               >
-                {/* simple animated bars -> we animate transform via class toggles */}
                 <div className="relative w-5 h-4">
                   <span
                     className={`absolute left-0 top-0 w-5 h-[2px] bg-white block transition-transform duration-300 ${open ? "translate-y-[8px] rotate-45" : ""}`}

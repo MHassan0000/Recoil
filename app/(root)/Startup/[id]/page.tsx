@@ -127,7 +127,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               Home
             </a>
             <a
-              href="/startups"
+              href="/"
               className="hover:text-yellow-400 transition-colors duration-300"
             >
               Startups
@@ -139,10 +139,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               About
             </a>
             <a
-              href="/contact"
+              href="/Contact"
               className="hover:text-yellow-400 transition-colors duration-300"
             >
-              Contact
+              Contact Us
             </a>
           </div>
         </div>

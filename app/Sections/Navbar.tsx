@@ -73,9 +73,9 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="/studio" className="relative group transition-all duration-300">
+            <Link href="/Contact" className="relative group transition-all duration-300">
               <span className="text-white group-hover:text-gray-200 transition-colors duration-300">
-                Studio
+                Contact
               </span>
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full rounded-full"></span>
             </Link>

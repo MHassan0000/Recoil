@@ -8,7 +8,7 @@ const Page = async () => {
   if (!session) redirect("/");
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-b from-[#0e0e10] via-[#111] to-[#1a1a1d] text-white px-6 py-16 md:px-20 flex flex-col items-center justify-center">
+  <section className="relative min-h-screen bg-gradient-to-b from-[#0e0e10] via-[#111] to-[#1a1a1d] text-white px-4 sm:px-6 py-12 md:px-20 flex flex-col items-center justify-center">
       {/* ====== Gradient Overlay Accent ====== */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(234,179,8,0.15),transparent_70%)] pointer-events-none" />
 
@@ -24,8 +24,8 @@ const Page = async () => {
 
       {/* ====== Form Container ====== */}
       <div
-        className="relative z-10 w-full max-w-3xl bg-[#171717]/70 backdrop-blur-md 
-        border border-gray-800 rounded-3xl shadow-2xl p-8 md:p-12
+        className="relative z-10 w-full max-w-full sm:max-w-2xl md:max-w-3xl bg-[#171717]/70 backdrop-blur-md
+        border border-gray-800 rounded-3xl shadow-2xl p-6 sm:p-8 md:p-12
         transition-transform duration-300 hover:scale-[1.01]"
       >
         <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-40 h-[2px] bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-400 rounded-full opacity-70"></div>

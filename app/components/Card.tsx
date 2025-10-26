@@ -76,15 +76,15 @@ const Card = ({ post }: { post: CardType }) => {
   return (
     <CardContainer>
       <CardBody
-        className="
-          bg-gray-50 relative group/card
+        className={
+          `bg-gray-50 relative group/card
           dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1]
           dark:bg-black dark:border-white/[0.2] border-black/[0.1]
-          sm:w-[35rem] w-full max-w-[30rem]
+          w-full sm:max-w-[30rem] md:max-w-[35rem]
           rounded-xl p-6 border
-          h-[40rem]
-          flex flex-col justify-between
-        "
+          min-h-[22rem] md:h-[40rem]
+          flex flex-col justify-between`
+        }
       >
         {/* ===== Header ===== */}
         <div className="flex justify-between items-center mb-4 shrink-0">
@@ -161,7 +161,7 @@ const Card = ({ post }: { post: CardType }) => {
               src={post.image ?? "/images/placeholder.png"}
               height="750"
               width="750"
-              className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl transition-all duration-300 cursor-pointer"
+              className="h-48 sm:h-56 md:h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl transition-all duration-300 cursor-pointer"
               alt={title}
             />
           </Link>

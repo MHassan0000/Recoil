@@ -61,13 +61,15 @@ export default async function Startups({ query }: { query: string }) {
           />
         </div>
 
-        <div className="flex flex-wrap justify-center items-center gap-10 mt-5">
+        <div className="w-full mt-5">
           {mappedPosts.length > 0 ? (
-            mappedPosts.map((item: CardType) => (
-              <Card key={item._id} post={item} />
-            ))
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 justify-items-center px-2 sm:px-6 md:px-10">
+              {mappedPosts.map((item: CardType) => (
+                <Card key={item._id} post={item} />
+              ))}
+            </div>
           ) : (
-            <p className="text-gray-400 text-lg mt-5">
+            <p className="text-gray-400 text-lg mt-5 text-center">
               No startups found for “{query}”.
             </p>
           )}

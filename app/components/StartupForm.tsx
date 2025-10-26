@@ -70,12 +70,12 @@ const StartupForm = () => {
   });
 
   return (
-    <div className="max-w-2xl mx-auto bg-gradient-to-br from-zinc-900 to-zinc-800 text-white p-8 rounded-2xl shadow-2xl mt-10 border border-zinc-700/40">
+    <div className="w-full max-w-full sm:max-w-2xl mx-auto bg-gradient-to-br from-zinc-900 to-zinc-800 text-white p-6 sm:p-8 rounded-2xl shadow-2xl mt-6 sm:mt-10 border border-zinc-700/40">
       <h2 className="text-3xl font-semibold mb-6 text-center bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
         Create Your Startup
       </h2>
 
-      <form action={formAction} className="space-y-6">
+  <form action={formAction} className="space-y-6">
         {/* Title */}
         <div>
           <label htmlFor="title" className="block text-sm font-medium mb-2">
@@ -86,7 +86,7 @@ const StartupForm = () => {
             id="title"
             name="title"
             placeholder="Enter startup title..."
-            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 ${
+            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 text-sm sm:text-base ${
               errors.title ? "ring-red-500" : "focus:ring-teal-500"
             }`}
             required
@@ -105,7 +105,7 @@ const StartupForm = () => {
             id="description"
             name="description"
             placeholder="Describe your startup idea..."
-            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 ${
+            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 text-sm sm:text-base ${
               errors.description ? "ring-red-500" : "focus:ring-teal-500"
             } h-28 resize-none`}
             required
@@ -123,7 +123,7 @@ const StartupForm = () => {
           <select
             id="category"
             name="category"
-            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 ${
+            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 text-sm sm:text-base ${
               errors.category ? "ring-red-500" : "focus:ring-teal-500"
             }`}
             required
@@ -149,7 +149,7 @@ const StartupForm = () => {
             id="image"
             name="image"
             placeholder="Startup Image URL..."
-            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 ${
+            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 text-sm sm:text-base ${
               errors.image ? "ring-red-500" : "focus:ring-teal-500"
             }`}
           />
@@ -168,11 +168,11 @@ const StartupForm = () => {
             value={pitch}
             onChange={(value) => setPitch(value ?? "")}
             preview="edit"
-            height={300}
+            height={240}
             style={{ borderRadius: 20, overflow: "hidden" }}
-            className={`w-full p-3 rounded-lg ${
+            className={`w-full p-0 rounded-lg ${
               errors.pitch ? "ring-2 ring-red-500" : "focus:ring-2 focus:ring-teal-500"
-            }`}
+            } h-[240px] sm:h-[300px]`}
             textareaProps={{
               placeholder:
                 "Briefly describe your idea and the problem it solves...",

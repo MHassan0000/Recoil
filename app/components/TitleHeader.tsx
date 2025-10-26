@@ -79,20 +79,20 @@ const TitleHeader: React.FC<TitleHeaderProps> = ({
   }, [showLine]);
 
   return (
-    <div ref={headerRef} className="text-center my-10">
-      <h1 className="text-3xl xl:text-7xl md:text-5xl font-extrabold tracking-tight text-white mb-3">
+    <div ref={headerRef} className="text-center my-8 sm:my-10 px-4 sm:px-0">
+      <h1 className="text-2xl sm:text-3xl md:text-5xl xl:text-6xl font-extrabold tracking-tight text-white mb-3">
         {title}
       </h1>
 
       {subscript && (
-        <p className="text-gray-500 xl:text-3xl text-base md:text-lg max-w-2xl mx-auto">
+        <p className="text-gray-500 text-sm sm:text-base md:text-lg max-w-xl sm:max-w-2xl mx-auto">
           {subscript}
         </p>
       )}
 
       {showLine && (
         <div
-          className={`header-line mt-6 w-50 h-1 bg-gradient-to-r mx-auto rounded-full`}
+          className={`header-line mt-6 w-40 sm:w-48 md:w-60 h-1 mx-auto rounded-full`}
           style={{
             backgroundImage: `linear-gradient(to right, ${color_from}, ${color_to})`,
           }}

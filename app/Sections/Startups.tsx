@@ -63,7 +63,7 @@ export default async function Startups({ query }: { query: string }) {
 
         <div className="w-full mt-5">
           {mappedPosts.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 justify-items-center px-2 sm:px-6 md:px-10">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3  px-2 sm:px-6 md:px-10">
               {mappedPosts.map((item: CardType) => (
                 <Card key={item._id} post={item} />
               ))}

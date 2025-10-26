@@ -29,7 +29,7 @@ export default async function Page({
       </div>
 
       {/* ===== Bookmarked Cards Section ===== */}
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-full mx-auto">
         <UserBookmarks id={id} authorName={author?.name} />
       </div>
 

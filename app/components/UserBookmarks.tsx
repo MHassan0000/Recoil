@@ -17,7 +17,7 @@ const UserBookmarks = async ({ id, authorName }: UserBookmarksProps) => {
   return (
     <>
       {bookmarks.length > 0 ? (
-        <div className="flex flex-wrap justify-center items-center mt-5 gap-10">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3  px-2 sm:px-6 md:px-10">
           {bookmarks.map((startup: CardType) => (
             <Card key={startup._id} post={{ ...startup, isBookmarked: true }} />
           ))}

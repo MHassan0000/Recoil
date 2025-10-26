@@ -8,9 +8,9 @@ export default function Footer() {
     <footer className="bg-black/90 text-gray-300 border-t border-gray-800 mt-20">
       <div
         className="
-          max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12
+          max-w-full mx-auto px-4 sm:px-6 py-8 sm:py-12
           grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10
-          justify-items-center lg:justify-items-start
+          justify-items-center 
           text-center 
         "
       >

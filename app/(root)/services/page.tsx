@@ -133,7 +133,7 @@ export default function Page() {
               desc:
                 "Share updates, respond to feedback, and track simple engagement metrics to refine your story.",
             },
-          ].map((s, i) => (
+          ].map((s) => (
             <li
               key={s.step}
               className="bg-[#0f0f10] rounded-xl p-6 border border-white/6"

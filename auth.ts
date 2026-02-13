@@ -4,7 +4,6 @@ import Google from "next-auth/providers/google";
 import { client } from "@/sanity/lib/client";
 import { AUTHOR_BY_GITHUB_ID_QUERY } from "@/sanity/lib/queries";
 import { writeClient } from "@/sanity/lib/write-client";
-import { Author } from "./sanity/types";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -47,17 +46,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
 
     async jwt({ token, account, profile }) {
-      let user: any = null;
       const providerId = profile?.id || profile?.sub;
 
       if (account && profile) {
-        user = await client
+        const user = await client
           .withConfig({ useCdn: false })
           .fetch(AUTHOR_BY_GITHUB_ID_QUERY, { id: providerId });
-      }
 
-      if (user) {
-        token.id = user._id; // ✅ Store Sanity _id in token
+        if (user) {
+          token.id = user._id;
+        }
       }
 
       return token;

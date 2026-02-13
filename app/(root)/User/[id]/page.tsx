@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { client } from "@/sanity/lib/client";
 import { AUTHOR_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { notFound } from "next/navigation";
@@ -11,8 +10,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const { id } = await params;
     const user = await client.fetch(AUTHOR_BY_ID_QUERY, { id });
     if (!user) return notFound();
-
-    const session = await auth();
 
     return (
         <section className="min-h-screen bg-gradient-to-b from-[#0d0d0f] via-[#111113] to-[#18181b] text-white px-6 py-20 md:px-24 relative overflow-hidden">
@@ -79,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 {/* ===== User's Startups Section ===== */}
                 <div>
                     <h3 className="text-3xl  font-extrabold text-yellow-400 mb-8 text-center ">
-                        {user.name}'s Startups
+                        {user.name}&apos;s Startups
                     </h3>
                     <Suspense fallback={<Skeleton className="h-8 w-48 rounded-md" />}>
                         <UserStartups id={id} authorName={user.name} />

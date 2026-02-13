@@ -2,14 +2,13 @@ import React from "react";
 import Card, { CardType } from "../components/Card";
 import TitleHeader from "../components/TitleHeader";
 import { STARTUPS_QUERY, BOOKMARKS_BY_AUTHOR_ID_QUERY } from "@/sanity/lib/queries";
-import { Author } from "@/sanity/types";
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { auth } from "@/auth";
 import { client } from "@/sanity/lib/client";
 
 export default async function Startups({ query }: { query: string }) {
   const session = await auth();
-  const userId = (session as any)?.user?.id ?? (session as any)?.id ?? null;
+  const userId = session?.user?.id ?? null;
 
   // Fetch all startups (ordered by created date desc)
   const { data: Posts } = await sanityFetch({ query: STARTUPS_QUERY });
@@ -18,11 +17,11 @@ export default async function Startups({ query }: { query: string }) {
   let bookmarkedIds: string[] = [];
   if (userId) {
     const author = await client.fetch(BOOKMARKS_BY_AUTHOR_ID_QUERY, { id: userId });
-    bookmarkedIds = author?.bookmarks?.map((b: Author) => b._id) || [];
+    bookmarkedIds = author?.bookmarks?.map((b: { _id: string }) => b._id) || [];
   }
 
   // Attach isBookmarked flag for UI highlighting
-  const PostsWithBookmarks = Posts.map((post: any) => ({
+  const PostsWithBookmarks = Posts.map((post: CardType) => ({
     ...post,
     isBookmarked: bookmarkedIds.includes(post._id),
   }));
@@ -31,7 +30,7 @@ export default async function Startups({ query }: { query: string }) {
 
   // Filter for search (same logic as before)
   const filteredPosts = searchQuery
-    ? PostsWithBookmarks.filter((post: any) => {
+    ? PostsWithBookmarks.filter((post: CardType) => {
         const title = (post.title || "").toString().toLowerCase();
         const category = (post.category || "").toString().toLowerCase();
         const authorName = (post.author?.name || "").toString().toLowerCase();

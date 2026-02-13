@@ -5,7 +5,7 @@ import { client } from "@/sanity/lib/client";
 import slugify from "slugify";
 import { writeClient } from "@/sanity/lib/write-client";
 
-export const createStartup = async (state : any , form: FormData, pitch: string) =>{
+export const createStartup = async (state: { error: string; status: string }, form: FormData, pitch: string) =>{
 
     const session = await auth();
     if(!session){
@@ -70,7 +70,7 @@ export async function toggleBookmark(userId: string, startupId: string) {
     }
 
     const sanityUserId = user._id;
-    const isBookmarked = user?.bookmarks?.some((b: any) => b._id === startupId);
+    const isBookmarked = user?.bookmarks?.some((b: { _id: string }) => b._id === startupId);
 
     if (isBookmarked) {
       // Remove bookmark

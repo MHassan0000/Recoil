@@ -25,8 +25,7 @@ const Card = ({ post }: { post: CardType }) => {
   // Initialize bookmark state
   const [isBookmarked, setIsBookmarked] = useState<boolean>(!!post.isBookmarked);
 
-  const userId =
-    (session as any)?.user?.id ?? (session as any)?.id ?? null;
+  const userId = session?.user?.id ?? null;
 
   const id = post._id ?? "";
   const title = post.title ?? "";

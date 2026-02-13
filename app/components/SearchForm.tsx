@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ResetForm from "./ResetForm";
-import TitleHeader from "./TitleHeader";
 
 const SearchForm = () => {
   const router = useRouter();

@@ -120,30 +120,30 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           {/* Quick Links */}
           <div className="flex flex-wrap justify-center md:justify-end gap-5 text-sm text-gray-400 font-medium">
-            <a
+            <Link
               href="/"
               className="hover:text-yellow-400 transition-colors duration-300"
             >
               Home
-            </a>
-            <a
+            </Link>
+            <Link
               href="/"
               className="hover:text-yellow-400 transition-colors duration-300"
             >
               Startups
-            </a>
-            <a
+            </Link>
+            <Link
               href="/about"
               className="hover:text-yellow-400 transition-colors duration-300"
             >
               About
-            </a>
-            <a
+            </Link>
+            <Link
               href="/Contact"
               className="hover:text-yellow-400 transition-colors duration-300"
             >
               Contact Us
-            </a>
+            </Link>
           </div>
         </div>
 

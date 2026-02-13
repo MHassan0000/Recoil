@@ -65,18 +65,13 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const userId = (session as any)?.user?.id ?? (session as any)?.id ?? "";
-  const userImage = (session as any)?.user?.image ?? null;
+  const userId = session?.user?.id ?? "";
+  const userImage = session?.user?.image ?? null;
 
   const handleSignOut = async () => {
     await signOut({ redirect: false });
     router.push("/");
     setOpen(false);
-  };
-
-  const handleNavClick = (href: string) => {
-    setOpen(false);
-    router.push(href);
   };
 
   return (

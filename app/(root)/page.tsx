@@ -4,11 +4,11 @@ import Hero from '../Sections/Hero'
 import Footer from '../Sections/Footer'
 
 
-export default async function  Page({searchParams} :{searchParams : Promise<{query? : any}>}) {
-  const query = (await searchParams).query
+export default async function  Page({searchParams} :{searchParams : Promise<{query? : string}>}) {
+  const query = (await searchParams).query ?? ""
   return (
     <>
-      <Hero  query = {query}/>
+      <Hero />
       <Startups query={query} />
       <Footer />
     </>

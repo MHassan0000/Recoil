@@ -2,7 +2,7 @@ import React from "react";
 import DarkVeil from "../components/Darkveil";
 import SearchForm from "../components/SearchForm";
 
-export default function Hero({ query }: { query: string }) {
+export default function Hero() {
   return (
   <section className="pt-8 relative h-screen overflow-hidden flex items-center justify-center">
       {/* Background Layer */}

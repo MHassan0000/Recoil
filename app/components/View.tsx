@@ -12,7 +12,11 @@ export default async function View({ id }: { id: string }) {
   
 
 
-  writeClient.patch(id).setIfMissing({ views: 0 }).set({ views: Views + 1 }).commit();
+  await writeClient
+    .patch(id)
+    .setIfMissing({ views: 0 })
+    .set({ views: Views + 1 })
+    .commit();
 
   return (
     <span

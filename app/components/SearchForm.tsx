@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 import ResetForm from "./ResetForm";
 
 const SearchForm = () => {
@@ -43,7 +44,7 @@ const SearchForm = () => {
             type="submit"
 
           >
-            <img width={50} className="invert hover:scale-90 cursor-pointer" src="/images/search.svg" alt="X" />
+             <Image width={50} height={50} className="invert hover:scale-90 cursor-pointer" src="/images/search.svg" alt="Search" />
           </button>
         </div>
       </form>

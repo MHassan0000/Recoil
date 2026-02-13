@@ -1,18 +1,5 @@
 @import "tailwindcss";
-
-@font-face {
-  font-family: "real2";
-  src: url("/fonts/Among2.woff2") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: "super";
-  src: url("/fonts/super.ttf") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
+@config "../tailwind.config.ts";
 
 html,
 body {
@@ -20,7 +7,7 @@ body {
   color: white;
   padding: 0;
   margin: 0;
-  font-family: poppins;
+  font-family: var(--font-poppins), sans-serif;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -102,7 +89,7 @@ body {
 .tag {
   background-color: var(--secondary, #ddd);
   padding: 0.75rem 1.5rem;
-  font-family: "Work Sans", sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-weight: 700;
   border-radius: 0.125rem;
   text-transform: uppercase;
@@ -113,7 +100,7 @@ body {
   text-transform: uppercase;
   background: black;
   padding: 0.75rem 1.5rem;
-  font-family: "Work Sans", sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-weight: 800;
   color: white;
   font-size: 36px;
@@ -218,7 +205,7 @@ body {
   padding: 1rem;
   background: white;
   color: black;
-  font-family: "Work Sans", sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-weight: 500;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   transition: box-shadow 0.5s;

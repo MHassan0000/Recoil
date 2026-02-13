@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 const ResetForm = ({ onClear }: { onClear: () => void }) => {
   return (
@@ -9,7 +10,7 @@ const ResetForm = ({ onClear }: { onClear: () => void }) => {
       onClick={onClear}
       
     >
-      <img width={35} className="invert hover:scale-90 cursor-pointer" src="/images/close.png" alt="X" />
+      <Image width={35} height={35} className="invert hover:scale-90 cursor-pointer" src="/images/close.png" alt="Clear" />
     </button>
   );
 };

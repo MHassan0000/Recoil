@@ -5,6 +5,7 @@ import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 import { formatDate } from "@/lib/utils";
 import { Startup, Author } from "../../sanity/types";
 import Link from "next/link";
+import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
@@ -139,6 +140,8 @@ const Card = ({ post }: { post: CardType }) => {
                 <img
                   src={author?.image || "/images/user.png"}
                   alt={author?.name || "Unknown Author"}
+                  width={32}
+                  height={32}
                   className="w-8 h-8 rounded-full object-cover border border-white/30 hover:scale-105 transition-transform"
                 />
                 <span className="text-neutral-800 dark:text-neutral-200">
@@ -156,10 +159,10 @@ const Card = ({ post }: { post: CardType }) => {
         {/* ===== Image ===== */}
         <CardItem translateZ="100" className="w-full mt-2 mb-4 shrink-0">
           <Link href={`/Startup/${id}`}>
-            <img
+            <Image
               src={post.image ?? "/images/placeholder.png"}
-              height="750"
-              width="750"
+              height={750}
+              width={750}
               className="h-48 sm:h-56 md:h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl transition-all duration-300 cursor-pointer"
               alt={title}
             />
@@ -174,7 +177,7 @@ const Card = ({ post }: { post: CardType }) => {
             as="button"
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-base font-medium dark:text-white"
           >
-            <img className="invert w-[24px]" src="/images/visible.png" alt="Views" />
+            <Image className="invert w-[24px]" src="/images/visible.png" alt="Views" width={24} height={24} />
             {views}
           </CardItem>
 

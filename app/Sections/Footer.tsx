@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
 
 export default function Footer() {
@@ -17,7 +18,7 @@ export default function Footer() {
         {/* Brand */}
         <div>
           <div className="flex justify-center lg:justify-start items-center gap-3 mb-3">
-            <img src="/images/infinity.png" alt="Recoil Logo" className="w-10 h-10" />
+            <Image src="/images/infinity.png" alt="Recoil Logo" className="w-10 h-10" width={40} height={40} />
             <h2 className="text-2xl font-bold text-white">Recoil</h2>
           </div>
           <p className="text-gray-400 text-sm text-left  leading-relaxed max-w-xs">

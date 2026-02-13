@@ -3,9 +3,12 @@ import { client } from "@/sanity/lib/client";
 import { STARTUP_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { notFound } from "next/navigation";
 import { CalendarDays } from "lucide-react";
+import Image from "next/image";
 import View from "../../../components/View";
 import { Skeleton } from "../../../components/Skeleton";
 import Link from "next/link";
+
+export const revalidate = 60; // Revalidate this page every 60 seconds
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -37,9 +40,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       {/* ===== Hero Image ===== */}
       {post.image && (
         <div className="max-w-5xl mx-auto mb-16 rounded-2xl overflow-hidden shadow-2xl border border-gray-800 relative hover:scale-105 transition-transform duration-300">
-          <img
+          <Image
             src={post.image}
             alt={post.title}
+            width={1200}
+            height={500}
             className="object-cover w-full h-[400px] md:h-[500px]"
           />
         </div>
@@ -56,6 +61,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <img
                 src={post.author.image}
                 alt={post.author?.name}
+                width={60}
+                height={60}
                 className="w-[60px] h-[60px] rounded-full border-2 border-yellow-400 object-cover cursor-pointer"
               />
             )}

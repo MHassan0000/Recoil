@@ -5,7 +5,10 @@ import { formatDate } from "@/lib/utils";
 import { Skeleton } from "@/app/components/Skeleton";
 import UserStartups from "@/app/components/UserStartups";
 import React, { Suspense } from "react";
+import Image from "next/image";
 import { CalendarDays, Mail, User2 } from "lucide-react";
+
+export const revalidate = 60; // Revalidate this page every 60 seconds
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const user = await client.fetch(AUTHOR_BY_ID_QUERY, { id });
@@ -31,9 +34,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <div className="relative group">
                         <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-yellow-400 shadow-xl transition-transform duration-500 group-hover:scale-105 group-hover:shadow-yellow-500/30">
                             {user.image ? (
-                                <img
+                                <Image
                                     src={user.image ? user.image : "/images/user.png"}
                                     alt={user.name}
+                                    width={160}
+                                    height={160}
                                     className="object-cover w-full h-full"
                                 />
                             ) : (

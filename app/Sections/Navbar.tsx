@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Plus, Bookmark, X } from "lucide-react";
 import { motion } from "framer-motion";
@@ -86,7 +87,7 @@ export default function Navbar() {
             {/* Logo */}
             <div className="flex items-center gap-3">
               <Link href="/" className="flex items-center gap-3 logo">
-                <img src="/images/infinity.png" alt="Recoil" className="w-9 h-9 md:w-10 md:h-10" />
+                <Image src="/images/infinity.png" alt="Recoil" className="w-9 h-9 md:w-10 md:h-10" width={40} height={40} />
                 <span className="font-bold text-xl md:text-3xl">Recoil</span>
               </Link>
             </div>
@@ -245,7 +246,7 @@ export default function Navbar() {
       >
         <div className="flex items-center justify-between mb-6">
           <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-3">
-            <img src="/images/infinity.png" alt="Recoil" className="w-8 h-8" />
+            <Image src="/images/infinity.png" alt="Recoil" className="w-8 h-8" width={32} height={32} />
             <span className="font-bold text-lg">Recoil</span>
           </Link>
           <button onClick={() => setOpen(false)} aria-label="Close menu" className="p-2 rounded-md bg-black/80">

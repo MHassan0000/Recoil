@@ -12,7 +12,16 @@
  * ---------------------------------------------------------------------------------
  */
 
-// Source: schema.json
+export declare const internalGroqTypeReferenceTo: unique symbol;
+
+// Source: sanity/extract.json
+export type AuthorReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "author";
+};
+
 export type Startup = {
   _id: string;
   _type: "startup";
@@ -21,17 +30,27 @@ export type Startup = {
   _rev: string;
   title?: string;
   slug?: Slug;
-  author?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "author";
-  };
+  author?: AuthorReference;
   views?: number;
   description?: string;
   category?: string;
   image?: string;
-  pitch?: string;
+  pitch?: Markdown;
+};
+
+export type Markdown = string;
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
+};
+
+export type StartupReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "startup";
 };
 
 export type Author = {
@@ -46,16 +65,12 @@ export type Author = {
   email?: string;
   image?: string;
   bio?: string;
-  bookmarks?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "startup";
-  }>;
+  bookmarks?: Array<
+    {
+      _key: string;
+    } & StartupReference
+  >;
 };
-
-export type Markdown = string;
 
 export type SanityImagePaletteSwatch = {
   _type: "sanity.imagePaletteSwatch";
@@ -81,6 +96,18 @@ export type SanityImageDimensions = {
   height?: number;
   width?: number;
   aspectRatio?: number;
+};
+
+export type SanityImageMetadata = {
+  _type: "sanity.imageMetadata";
+  location?: Geopoint;
+  dimensions?: SanityImageDimensions;
+  palette?: SanityImagePalette;
+  lqip?: string;
+  blurHash?: string;
+  thumbHash?: string;
+  hasAlpha?: boolean;
+  isOpaque?: boolean;
 };
 
 export type SanityImageHotspot = {
@@ -121,6 +148,13 @@ export type SanityFileAsset = {
   source?: SanityAssetSourceData;
 };
 
+export type SanityAssetSourceData = {
+  _type: "sanity.assetSourceData";
+  name?: string;
+  id?: string;
+  url?: string;
+};
+
 export type SanityImageAsset = {
   _id: string;
   _type: "sanity.imageAsset";
@@ -144,17 +178,6 @@ export type SanityImageAsset = {
   source?: SanityAssetSourceData;
 };
 
-export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata";
-  location?: Geopoint;
-  dimensions?: SanityImageDimensions;
-  palette?: SanityImagePalette;
-  lqip?: string;
-  blurHash?: string;
-  hasAlpha?: boolean;
-  isOpaque?: boolean;
-};
-
 export type Geopoint = {
   _type: "geopoint";
   lat?: number;
@@ -162,18 +185,158 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
-};
+export type AllSanitySchemaTypes =
+  | AuthorReference
+  | Startup
+  | Markdown
+  | Slug
+  | StartupReference
+  | Author
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageMetadata
+  | SanityImageHotspot
+  | SanityImageCrop
+  | SanityFileAsset
+  | SanityAssetSourceData
+  | SanityImageAsset
+  | Geopoint;
 
-export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
-  name?: string;
-  id?: string;
-  url?: string;
-};
+// Source: sanity/lib/queries.ts
+// Variable: STARTUPS_QUERY
+// Query: *[_type == "startup" && defined(slug.current) ] | order(_createdAt desc) {	_id,	title,	slug,	_createdAt,	author -> {		_id, name, username, image, bio	},	views,	description,	category,	image	}
+export type STARTUPS_QUERY_RESULT = Array<{
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  _createdAt: string;
+  author: {
+    _id: string;
+    name: string | null;
+    username: string | null;
+    image: string | null;
+    bio: string | null;
+  } | null;
+  views: number | null;
+  description: string | null;
+  category: string | null;
+  image: string | null;
+}>;
 
-export type AllSanitySchemaTypes = Startup | Author | Markdown | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
-export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: sanity/lib/queries.ts
+// Variable: STARTUP_BY_ID_QUERY
+// Query: *[_type == "startup" && _id == $id][0] {	_id,	title,	slug,	_createdAt,	author -> {		_id, name, username, image, bio	},	views,	description,	category,	image,	pitch}
+export type STARTUP_BY_ID_QUERY_RESULT = {
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  _createdAt: string;
+  author: {
+    _id: string;
+    name: string | null;
+    username: string | null;
+    image: string | null;
+    bio: string | null;
+  } | null;
+  views: number | null;
+  description: string | null;
+  category: string | null;
+  image: string | null;
+  pitch: Markdown | null;
+} | null;
+
+// Source: sanity/lib/queries.ts
+// Variable: STARTUP_BY_VIEWS
+// Query: *[_type == "startup" && _id == $id][0]{		_id, views	}
+export type STARTUP_BY_VIEWS_RESULT = {
+  _id: string;
+  views: number | null;
+} | null;
+
+// Source: sanity/lib/queries.ts
+// Variable: AUTHOR_BY_GITHUB_ID_QUERY
+// Query: *[_type == "author" && id == $id][0]{		_id, id, name, username, image, bio, email}
+export type AUTHOR_BY_GITHUB_ID_QUERY_RESULT = {
+  _id: string;
+  id: string | null;
+  name: string | null;
+  username: string | null;
+  image: string | null;
+  bio: string | null;
+  email: string | null;
+} | null;
+
+// Source: sanity/lib/queries.ts
+// Variable: AUTHOR_BY_ID_QUERY
+// Query: *[_type == "author" && _id == $id][0]{		_id,id , _createdAt, name, username, image, bio, email}
+export type AUTHOR_BY_ID_QUERY_RESULT = {
+  _id: string;
+  id: string | null;
+  _createdAt: string;
+  name: string | null;
+  username: string | null;
+  image: string | null;
+  bio: string | null;
+  email: string | null;
+} | null;
+
+// Source: sanity/lib/queries.ts
+// Variable: STARTUPS_BY_AUTHOR_ID_QUERY
+// Query: *[_type == "startup" && author._ref == $id] | order(_createdAt desc) {	_id,	title,	slug,	_createdAt,	author -> {		_id, name, username, image, bio	},	views,	description,	category,	image	}
+export type STARTUPS_BY_AUTHOR_ID_QUERY_RESULT = Array<{
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  _createdAt: string;
+  author: {
+    _id: string;
+    name: string | null;
+    username: string | null;
+    image: string | null;
+    bio: string | null;
+  } | null;
+  views: number | null;
+  description: string | null;
+  category: string | null;
+  image: string | null;
+}>;
+
+// Source: sanity/lib/queries.ts
+// Variable: BOOKMARKS_BY_AUTHOR_ID_QUERY
+// Query: *[_type == "author" && _id == $id][0]{    _id,    name,    bookmarks[]->{      _id,      title,      slug,      _createdAt,      author->{        _id, name, username, image, bio      },      views,      description,      category,      image    }  }
+export type BOOKMARKS_BY_AUTHOR_ID_QUERY_RESULT = {
+  _id: string;
+  name: string | null;
+  bookmarks: Array<{
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    _createdAt: string;
+    author: {
+      _id: string;
+      name: string | null;
+      username: string | null;
+      image: string | null;
+      bio: string | null;
+    } | null;
+    views: number | null;
+    description: string | null;
+    category: string | null;
+    image: string | null;
+  }> | null;
+} | null;
+
+// Query TypeMap
+import "@sanity/client";
+declare module "@sanity/client" {
+  interface SanityQueries {
+    '*[_type == "startup" && defined(slug.current) ] | order(_createdAt desc) {\n\t_id,\n\ttitle,\n\tslug,\n\t_createdAt,\n\tauthor -> {\n\t\t_id, name, username, image, bio\n\t},\n\tviews,\n\tdescription,\n\tcategory,\n\timage\n\t\n}': STARTUPS_QUERY_RESULT;
+    '*[_type == "startup" && _id == $id][0] {\n\t_id,\n\ttitle,\n\tslug,\n\t_createdAt,\n\tauthor -> {\n\t\t_id, name, username, image, bio\n\t},\n\tviews,\n\tdescription,\n\tcategory,\n\timage,\n\tpitch\n}': STARTUP_BY_ID_QUERY_RESULT;
+    '*[_type == "startup" && _id == $id][0]{\n\t\t_id, views\n\t}': STARTUP_BY_VIEWS_RESULT;
+    '*[_type == "author" && id == $id][0]{\n\t\t_id, id, name, username, image, bio, email}': AUTHOR_BY_GITHUB_ID_QUERY_RESULT;
+    '*[_type == "author" && _id == $id][0]{\n\n\t\t_id,id , _createdAt, name, username, image, bio, email}': AUTHOR_BY_ID_QUERY_RESULT;
+    '*[_type == "startup" && author._ref == $id] | order(_createdAt desc) {\n\t_id,\n\ttitle,\n\tslug,\n\t_createdAt,\n\tauthor -> {\n\t\t_id, name, username, image, bio\n\t},\n\tviews,\n\tdescription,\n\tcategory,\n\timage\n\t\n}': STARTUPS_BY_AUTHOR_ID_QUERY_RESULT;
+    '\n  *[_type == "author" && _id == $id][0]{\n    _id,\n    name,\n    bookmarks[]->{\n      _id,\n      title,\n      slug,\n      _createdAt,\n      author->{\n        _id, name, username, image, bio\n      },\n      views,\n      description,\n      category,\n      image\n    }\n  }\n': BOOKMARKS_BY_AUTHOR_ID_QUERY_RESULT;
+  }
+}

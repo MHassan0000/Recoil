@@ -17,7 +17,7 @@ export default async function Startups({ query }: { query: string }) {
   let bookmarkedIds: string[] = [];
   if (userId) {
     const author = await client.fetch(BOOKMARKS_BY_AUTHOR_ID_QUERY, { id: userId });
-    bookmarkedIds = author?.bookmarks?.map((b: { _id: string }) => b._id) || [];
+    bookmarkedIds = (author?.bookmarks ?? []).map((bookmark) => bookmark._id);
   }
 
   // Attach isBookmarked flag for UI highlighting

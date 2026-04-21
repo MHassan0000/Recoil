@@ -14,6 +14,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const user = await client.fetch(AUTHOR_BY_ID_QUERY, { id });
     if (!user) return notFound();
 
+    const userName = user.name ?? "Unknown user";
+    const userUsername = user.username ?? "unknown";
+
     return (
         <section className="min-h-screen bg-gradient-to-b from-[#0d0d0f] via-[#111113] to-[#18181b] text-white px-6 py-20 md:px-24 relative overflow-hidden">
             {/* Background Accent Blur */}
@@ -22,9 +25,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {/* ===== Header ===== */}
             <div className="max-w-5xl mx-auto text-center mb-16 relative z-10">
                 <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-3 py-2 bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-md">
-                    {user.name}
+                    {userName}
                 </h1>
-                <p className="text-gray-400 text-lg font-light">@{user.username}</p>
+                <p className="text-gray-400 text-lg font-light">@{userUsername}</p>
             </div>
 
             {/* ===== Profile Card ===== */}
@@ -36,7 +39,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                             {user.image ? (
                                 <Image
                                     src={user.image ? user.image : "/images/user.png"}
-                                    alt={user.name}
+                                    alt={userName}
                                     width={160}
                                     height={160}
                                     className="object-cover w-full h-full"
@@ -55,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     {/* User Details */}
                     <div className="flex-1 space-y-5 text-center md:text-left">
                         <h2 className="text-3xl font-semibold text-yellow-400">
-                            About {user.name}
+                            About {userName}
                         </h2>
                         <p className="text-gray-300 leading-relaxed max-w-xl mx-auto md:mx-0">
                             {user?.bio || "This user hasn’t written a bio yet."}
@@ -81,10 +84,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 {/* ===== User's Startups Section ===== */}
                 <div>
                     <h3 className="text-3xl  font-extrabold text-yellow-400 mb-8 text-center ">
-                        {user.name}&apos;s Startups
+                        {userName}&apos;s Startups
                     </h3>
                     <Suspense fallback={<Skeleton className="h-8 w-48 rounded-md" />}>
-                        <UserStartups id={id} authorName={user.name} />
+                        <UserStartups id={id} authorName={userName} />
                     </Suspense>
                 </div>
             </div>

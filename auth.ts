@@ -6,6 +6,7 @@ import { AUTHOR_BY_GITHUB_ID_QUERY } from "@/sanity/lib/queries";
 import { writeClient } from "@/sanity/lib/write-client";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
   providers: [
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID!,
@@ -18,7 +19,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, profile }) {
       // ✅ Works for both GitHub and Google
       const providerId = profile?.id || profile?.sub;
 

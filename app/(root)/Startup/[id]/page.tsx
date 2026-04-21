@@ -18,6 +18,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   if (!post) return notFound();
 
+  const startupTitle = post.title ?? "Untitled startup";
+  const authorName = post.author?.name ?? "Unknown author";
+  const authorUsername = post.author?.username ?? "unknown";
+
   return (
     <section className="min-h-screen bg-gradient-to-b from-[#0e0e10] via-[#111] to-[#1a1a1d] text-white px-6 py-16 md:px-20">
       {/* ===== Header Section ===== */}
@@ -30,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           })}
         </div>
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
-          {post.title}
+          {startupTitle}
         </h1>
         <p className="text-gray-300 max-w-2xl mx-auto text-lg">
           {post.description || "No description available"}
@@ -42,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <div className="max-w-5xl mx-auto mb-16 rounded-2xl overflow-hidden shadow-2xl border border-gray-800 relative hover:scale-105 transition-transform duration-300">
           <Image
             src={post.image}
-            alt={post.title}
+            alt={startupTitle}
             width={1200}
             height={500}
             className="object-cover w-full h-[400px] md:h-[500px]"
@@ -58,17 +62,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           {/* Author Info */}
           <Link href={`/User/${post.author?._id}`} className="flex items-center gap-4 ">
             {post.author?.image && (
-              <img
+              <Image
                 src={post.author.image}
-                alt={post.author?.name}
+                alt={authorName}
                 width={60}
                 height={60}
                 className="w-[60px] h-[60px] rounded-full border-2 border-yellow-400 object-cover cursor-pointer"
               />
             )}
             <div>
-              <h3 className="font-semibold text-lg cursor-pointer">{post.author?.name}</h3>
-              <p className="text-gray-400 text-sm">@{post.author?.username}</p>
+              <h3 className="font-semibold text-lg cursor-pointer">{authorName}</h3>
+              <p className="text-gray-400 text-sm">@{authorUsername}</p>
             </div>
           </Link>
 

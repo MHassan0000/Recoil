@@ -1,5 +1,4 @@
 import { defineType, defineField } from "sanity";
-import { RocketIcon } from "lucide-react";
 
 export const startup = defineType({
   name: "startup",

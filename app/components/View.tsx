@@ -5,17 +5,18 @@ import { Eye } from "lucide-react";
 
 export default async function View({ id }: { id: string }) {
   // Disable CDN to always get fresh dynamic data
-  const  {views : Views} = await client.withConfig({ useCdn: false }).fetch(
+  const startup = await client.withConfig({ useCdn: false }).fetch(
     STARTUP_BY_VIEWS,
     { id }
   );
+  const views = startup?.views ?? 0;
   
 
 
   await writeClient
     .patch(id)
     .setIfMissing({ views: 0 })
-    .set({ views: Views + 1 })
+    .set({ views: views + 1 })
     .commit();
 
   return (
@@ -34,7 +35,7 @@ export default async function View({ id }: { id: string }) {
         <span
           className="opacity-80 animate-[fadeIn_1s_ease-in-out] transition-opacity duration-300"
         >
-          {Views} views
+          {views} views
         </span>
       </span>
     </span>

@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from "react";
 import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 import { formatDate } from "@/lib/utils";
-import { Startup, Author } from "../../sanity/types";
+import { STARTUPS_QUERY_RESULT } from "../../sanity/types";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
@@ -12,8 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { toggleBookmark } from "@/lib/actions";
 import { Bookmark } from "lucide-react";
 
-export type CardType = Omit<Startup, "author"> & {
-  author?: Author;
+export type CardType = STARTUPS_QUERY_RESULT[number] & {
   isBookmarked?: boolean;
 };
 
@@ -137,7 +136,7 @@ const Card = ({ post }: { post: CardType }) => {
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-3">
               <Link href={`/User/${author?._id ?? "#"}`} className="flex items-center gap-3">
-                <img
+                <Image
                   src={author?.image || "/images/user.png"}
                   alt={author?.name || "Unknown Author"}
                   width={32}

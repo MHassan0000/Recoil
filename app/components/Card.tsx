@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { CardBody, CardContainer, CardItem } from "../components/3dcard";
 import { formatDate } from "@/lib/utils";
 import { STARTUPS_QUERY_RESULT } from "../../sanity/types";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { toast } from "sonner";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toggleBookmark } from "@/lib/actions";
 import { Bookmark } from "lucide-react";
 
@@ -19,10 +18,7 @@ export type CardType = STARTUPS_QUERY_RESULT[number] & {
 const Card = ({ post }: { post: CardType }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
-
-  // Initialize bookmark state
   const [isBookmarked, setIsBookmarked] = useState<boolean>(!!post.isBookmarked);
   const [isSyncingBookmark, setIsSyncingBookmark] = useState(false);
 
@@ -36,13 +32,12 @@ const Card = ({ post }: { post: CardType }) => {
   const views = post.views ?? 0;
   const author = post.author ?? undefined;
 
-  const handleBookmarkClick = async () => {
-    if (!session || !userId) {
-      toast.info("Please log in to bookmark startups.");
-      return;
-    }
+  useEffect(() => {
+    setIsBookmarked(!!post.isBookmarked);
+  }, [post._id, post.isBookmarked]);
 
-    if (isSyncingBookmark) return;
+  const handleBookmarkClick = async () => {
+    if (!session || !userId || isSyncingBookmark) return;
 
     const previousState = isBookmarked;
     const optimisticState = !previousState;
@@ -51,35 +46,18 @@ const Card = ({ post }: { post: CardType }) => {
     setIsSyncingBookmark(true);
 
     try {
-      const result = await toggleBookmark(userId, id);
+      const result = await toggleBookmark(userId, id, optimisticState);
 
-      if (result?.success || result?.removed) {
-        const nextState =
-          typeof result?.isBookmarked === "boolean"
-            ? result.isBookmarked
-            : result.removed
-            ? false
-            : !isBookmarked;
-
-        setIsBookmarked(!!nextState);
-
-        if (nextState) {
-          toast.success("Added to your bookmarks!");
-        } else {
-          toast.success("Removed from your bookmarks!");
-          // Refresh ONLY if we are inside the bookmarks page
-          if (pathname.includes("/Bookmark")) {
-            startTransition(() => router.refresh());
-          }
-        }
-      } else {
+      if (!result?.success) {
         setIsBookmarked(previousState);
-        toast.error(result?.message || "Something went wrong while toggling bookmark.");
+        console.error(result?.message || "Something went wrong while toggling bookmark.");
+        return;
       }
+
+      startTransition(() => router.refresh());
     } catch (error) {
       setIsBookmarked(previousState);
       console.error(error);
-      toast.error("An unexpected error occurred.");
     } finally {
       setIsSyncingBookmark(false);
     }
@@ -108,18 +86,16 @@ const Card = ({ post }: { post: CardType }) => {
           <button
             onClick={handleBookmarkClick}
             disabled={isPending || isSyncingBookmark}
-            className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
-              isBookmarked
+            className={`p-2 rounded-full transition-all duration-300 hover:scale-110 cursor-pointer ${isBookmarked
                 ? "text-yellow-400 hover:text-yellow-500 bg-yellow-400/10"
                 : "text-gray-400 hover:text-gray-300"
-            }`}
+              }`}
             title={isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
           >
             <Bookmark
               size={26}
-              className={`transition-all duration-300 ${
-                isBookmarked ? "fill-yellow-400 scale-110" : "fill-none"
-              }`}
+              className={`transition-all duration-300 ${isBookmarked ? "fill-yellow-400 scale-110" : "fill-none"
+                }`}
             />
           </button>
         </div>

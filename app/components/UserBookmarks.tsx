@@ -2,6 +2,7 @@ import React from "react";
 import { client } from "@/sanity/lib/client";
 import { BOOKMARKS_BY_AUTHOR_ID_QUERY } from "@/sanity/lib/queries";
 import Card from "./Card";
+import { unstable_noStore as noStore } from "next/cache";
 
 interface UserBookmarksProps {
   id: string;
@@ -9,11 +10,11 @@ interface UserBookmarksProps {
 }
 
 const UserBookmarks = async ({ id, authorName }: UserBookmarksProps) => {
+  noStore();
+
   const displayName = authorName?.trim() || "this user";
-  
-  const bookmarksData = await client.fetch(BOOKMARKS_BY_AUTHOR_ID_QUERY, { id });
-  const bookmarks = bookmarksData?.bookmarks ?? [];
-  
+  const bookmarksData = await client.withConfig({ useCdn: false }).fetch(BOOKMARKS_BY_AUTHOR_ID_QUERY, { id });
+  const bookmarks = (bookmarksData?.bookmarks ?? []).filter(Boolean);
 
   return (
     <>

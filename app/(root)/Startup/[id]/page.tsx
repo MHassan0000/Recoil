@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
 
   // Fetch startup details by ID
-  const post = await client.fetch(STARTUP_BY_ID_QUERY, { id });
+  const post = await client.withConfig({ useCdn: false }).fetch(STARTUP_BY_ID_QUERY, { id });
 
   if (!post) return notFound();
 

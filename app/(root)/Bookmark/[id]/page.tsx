@@ -3,18 +3,21 @@ import { notFound } from "next/navigation";
 import { client } from "@/sanity/lib/client";
 import { AUTHOR_BY_ID_QUERY } from "@/sanity/lib/queries";
 import UserBookmarks from "../../../components/UserBookmarks"
+import { unstable_noStore as noStore } from "next/cache";
 
-export const revalidate = 30; // Revalidate bookmarks page every 30 seconds
+export const dynamic = "force-dynamic";
 
 export default async function Page({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  noStore();
+
   const { id } = await params;
 
   
-  const author = await client.fetch(AUTHOR_BY_ID_QUERY, { id });
+  const author = await client.withConfig({ useCdn: false }).fetch(AUTHOR_BY_ID_QUERY, { id });
   if (!author) return notFound();
 
   return (

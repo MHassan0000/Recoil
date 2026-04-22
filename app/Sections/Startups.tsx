@@ -5,8 +5,11 @@ import { STARTUPS_QUERY, BOOKMARKS_BY_AUTHOR_ID_QUERY } from "@/sanity/lib/queri
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { auth } from "@/auth";
 import { client } from "@/sanity/lib/client";
+import { unstable_noStore as noStore } from "next/cache";
 
 export default async function Startups({ query }: { query: string }) {
+  noStore();
+
   const session = await auth();
   const userId = session?.user?.id ?? null;
 
@@ -16,8 +19,8 @@ export default async function Startups({ query }: { query: string }) {
   // Fetch bookmarked startup IDs for this user
   let bookmarkedIds: string[] = [];
   if (userId) {
-    const author = await client.fetch(BOOKMARKS_BY_AUTHOR_ID_QUERY, { id: userId });
-    bookmarkedIds = (author?.bookmarks ?? []).map((bookmark) => bookmark._id);
+    const author = await client.withConfig({ useCdn: false }).fetch(BOOKMARKS_BY_AUTHOR_ID_QUERY, { id: userId });
+    bookmarkedIds = (author?.bookmarks ?? []).flatMap((bookmark) => (bookmark?._id ? [bookmark._id] : []));
   }
 
   // Attach isBookmarked flag for UI highlighting

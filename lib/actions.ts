@@ -5,6 +5,7 @@ import { client } from "@/sanity/lib/client";
 import slugify from "slugify";
 import { writeClient } from "@/sanity/lib/write-client";
 import { getImageFileError, startupTextSchema } from "./validation";
+import { revalidatePath } from "next/cache";
 
 type CreateStartupResult = {
   id?: string;
@@ -116,20 +117,20 @@ export const createStartup = async (form: FormData): Promise<CreateStartupResult
 
 
 }
-export async function toggleBookmark(userId: string, startupId: string) {
+export async function toggleBookmark(userId: string, startupId: string, shouldBookmark?: boolean) {
   try {
     if (!userId || !startupId) {
       return { success: false, message: "Missing IDs" };
     }
 
     
-    let user = await client.fetch(
+    let user = await client.withConfig({ useCdn: false }).fetch(
       `*[_type == "author" && _id == $userId][0]{_id, bookmarks[]-> {_id}}`,
       { userId }
     );
 
     if (!user) {
-      const possible = await client.fetch(
+      const possible = await client.withConfig({ useCdn: false }).fetch(
         `*[_type == "author" && id == $userId][0]{_id, bookmarks[]-> {_id}}`,
         { userId }
       );
@@ -142,27 +143,34 @@ export async function toggleBookmark(userId: string, startupId: string) {
 
     const sanityUserId = user._id;
     const isBookmarked = user?.bookmarks?.some((b: { _id: string }) => b._id === startupId);
+    const targetState = typeof shouldBookmark === "boolean" ? shouldBookmark : !isBookmarked;
 
-    if (isBookmarked) {
-      // Remove bookmark
+    if (!targetState) {
       await writeClient
         .patch(sanityUserId)
         .unset([`bookmarks[_ref=="${startupId}"]`])
         .commit();
 
-      
+      revalidatePath("/");
+      revalidatePath(`/Bookmark/${sanityUserId}`);
+      revalidatePath(`/User/${sanityUserId}`);
+
       return { success: true, removed: true, isBookmarked: false };
-    } else {
-      // Add bookmark
+    }
+
+    if (!isBookmarked) {
       await writeClient
         .patch(sanityUserId)
         .setIfMissing({ bookmarks: [] })
         .append("bookmarks", [{ _type: "reference", _ref: startupId }])
         .commit();
-
-     
-      return { success: true, removed: false, isBookmarked: true };
     }
+
+    revalidatePath("/");
+    revalidatePath(`/Bookmark/${sanityUserId}`);
+    revalidatePath(`/User/${sanityUserId}`);
+
+    return { success: true, removed: false, isBookmarked: true };
   } catch (error) {
     console.error("Bookmark toggle failed:", error);
     return { success: false, message: String(error) };

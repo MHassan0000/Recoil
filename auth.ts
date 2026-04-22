@@ -3,7 +3,6 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { client } from "@/sanity/lib/client";
 import { AUTHOR_BY_GITHUB_ID_QUERY } from "@/sanity/lib/queries";
-import { writeClient } from "@/sanity/lib/write-client";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
@@ -21,7 +20,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user, profile }) {
       // ✅ Works for both GitHub and Google
-      const providerId = profile?.id || profile?.sub;
+      const providerId = normalizeText(String(profile?.id ?? profile?.sub ?? ""));
+      if (!providerId) {
+        return true;
+      }
+
       const displayName =
         normalizeText(user?.name) ??
         normalizeText(profile?.name) ??
@@ -40,6 +43,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         .fetch(AUTHOR_BY_GITHUB_ID_QUERY, { id: providerId });
 
       if (!existingUser) {
+        const { writeClient } = await import("@/sanity/lib/write-client");
+
         await writeClient.create({
           _type: "author",
           id: providerId,
@@ -58,12 +63,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
 
     async jwt({ token, account, profile }) {
-      const providerId = profile?.id || profile?.sub;
+      const providerId = normalizeText(String(profile?.id ?? profile?.sub ?? ""));
 
-      if (account && profile) {
+      if (account && profile && providerId) {
         const user = await client
           .withConfig({ useCdn: false })
-          .fetch(AUTHOR_BY_GITHUB_ID_QUERY, { id: providerId });
+           .fetch(AUTHOR_BY_GITHUB_ID_QUERY, { id: providerId });
 
         if (user) {
           token.id = user._id;
@@ -75,7 +80,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
     async session({ session, token }) {
       // ✅ Add Sanity ID to session user
-      Object.assign(session.user, { id: token.id });
+      if (session.user && token?.id) {
+        Object.assign(session.user, { id: token.id });
+      }
+
       return session;
     },
   },

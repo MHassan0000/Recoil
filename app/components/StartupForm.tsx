@@ -39,7 +39,7 @@ const StartupForm = () => {
     const result = await createStartup(formData);
 
     if (result.status === "SUCCESS") {
-      toast.success("🚀 Startup created successfully!", {
+      toast.success("Startup created successfully!", {
         description: "Your startup has been published to the feed.",
         duration: 4000,
       });
@@ -53,7 +53,7 @@ const StartupForm = () => {
 
     setErrors(result.fieldErrors ?? {});
 
-    toast.error("⚠️ Submit failed", {
+    toast.error("Submit failed", {
       description: result.error || "Please check your inputs and try again.",
     });
 

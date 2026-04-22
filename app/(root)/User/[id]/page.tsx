@@ -7,11 +7,13 @@ import UserStartups from "@/app/components/UserStartups";
 import React, { Suspense } from "react";
 import Image from "next/image";
 import { CalendarDays, Mail, User2 } from "lucide-react";
+import { unstable_noStore as noStore } from "next/cache";
 
-export const revalidate = 60; // Revalidate this page every 60 seconds
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+    noStore();
+
     const { id } = await params;
-    const user = await client.fetch(AUTHOR_BY_ID_QUERY, { id });
+    const user = await client.withConfig({ useCdn: false }).fetch(AUTHOR_BY_ID_QUERY, { id });
     if (!user) return notFound();
 
     const userName = cleanText(user.name) ?? cleanText(user.username) ?? "Unknown user";

@@ -22,6 +22,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user, profile }) {
       // ✅ Works for both GitHub and Google
       const providerId = profile?.id || profile?.sub;
+      const displayName =
+        normalizeText(user?.name) ??
+        normalizeText(profile?.name) ??
+        normalizeText(profile?.login) ??
+        normalizeText(profile?.given_name) ??
+        "Unknown";
+      const displayUsername =
+        normalizeText(profile?.login) ||
+        normalizeText(profile?.given_name) ||
+        normalizeText(user?.name) ||
+        normalizeText(profile?.name) ||
+        "Unknown";
 
       const existingUser = await client
         .withConfig({ useCdn: false })
@@ -31,9 +43,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         await writeClient.create({
           _type: "author",
           id: providerId,
-          name: user?.name,
-          username:
-            profile?.login || profile?.given_name || user?.name || "Unknown",
+          name: displayName,
+          username: displayUsername,
           email: user?.email,
           image: user?.image,
           bio:
@@ -69,3 +80,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
 });
+
+function normalizeText(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+
+  const trimmed = value.trim();
+  return trimmed ? trimmed : undefined;
+}

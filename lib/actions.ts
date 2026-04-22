@@ -4,22 +4,84 @@ import { parseServerActionResponse } from "./utils";
 import { client } from "@/sanity/lib/client";
 import slugify from "slugify";
 import { writeClient } from "@/sanity/lib/write-client";
+import { getImageFileError, startupTextSchema } from "./validation";
 
-export const createStartup = async (state: { error: string; status: string }, form: FormData, pitch: string) =>{
+type CreateStartupResult = {
+  id?: string;
+  error: string;
+  status: "SUCCESS" | "ERROR";
+  fieldErrors?: Record<string, string>;
+};
+
+export const createStartup = async (form: FormData): Promise<CreateStartupResult> =>{
 
     const session = await auth();
     if(!session){
-        return  parseServerActionResponse({ status: "error", error: "NOT SIGNED IN" });
+        return  parseServerActionResponse({
+          status: "ERROR",
+          error: "NOT SIGNED IN",
+          fieldErrors: {},
+        });
     }
-    const { title , description , category , image} = Object.fromEntries(Array.from(form).filter(([key]) => key!== "pitch"));
+
+    const title = (form.get("title") as string | null) ?? "";
+    const description = (form.get("description") as string | null) ?? "";
+    const category = (form.get("category") as string | null) ?? "";
+    const pitch = (form.get("pitch") as string | null) ?? "";
+    const imageFile = form.get("image") as File | null;
+
+    const parsed = startupTextSchema.safeParse({
+      title,
+      description,
+      category,
+      pitch,
+    });
+
+    const imageError = getImageFileError(imageFile);
+
+    if (!parsed.success || imageError) {
+      const fieldErrors: Record<string, string> = {};
+
+      if (!parsed.success) {
+        const flattened = parsed.error.flatten().fieldErrors;
+        Object.entries(flattened).forEach(([key, value]) => {
+          if (value?.[0]) {
+            fieldErrors[key] = value[0];
+          }
+        });
+      }
+
+      if (imageError) {
+        fieldErrors.image = imageError;
+      }
+
+      return parseServerActionResponse({
+        status: "ERROR",
+        error: "Validation failed",
+        fieldErrors,
+      });
+    }
+
+    const { data } = parsed;
     const slug = slugify(title as string , {lower : true , strict : true});
 
     try {
+        const uploadedImage = await writeClient.assets.upload("image", imageFile as File, {
+          filename: `${slug || "startup"}.${(imageFile?.name.split(".").pop() || "jpg").toLowerCase()}`,
+          contentType: imageFile?.type,
+        });
+
         const startup  = {
-            title,
-            description,
-            category,
-            image,
+            title: data.title,
+            description: data.description,
+            category: data.category,
+            image: {
+                _type: "image",
+                asset: {
+                    _type: "reference",
+                    _ref: uploadedImage._id,
+                },
+            },
             slug : {
                 _type: 'slug',
                 current: slug,
@@ -28,19 +90,28 @@ export const createStartup = async (state: { error: string; status: string }, fo
                 _type: 'reference',
                 _ref: session?.user?.id,
             },
-            pitch,
+            pitch: data.pitch,
         };
 
             const result = await writeClient.create({
                 _type: 'startup',
                 ...startup,
             });
-            return parseServerActionResponse({ ...result , status: "SUCCESS", error: "" });
-        
+            return parseServerActionResponse({
+              id: result._id,
+              status: "SUCCESS",
+              error: "",
+              fieldErrors: {},
+            });
+         
 
     }
     catch (error) {
-        return parseServerActionResponse({ status: "Error", error: JSON.stringify(error) });
+        return parseServerActionResponse({
+          status: "ERROR",
+          error: error instanceof Error ? error.message : "Failed to create startup",
+          fieldErrors: {},
+        });
     }
 
 

@@ -14,8 +14,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const user = await client.fetch(AUTHOR_BY_ID_QUERY, { id });
     if (!user) return notFound();
 
-    const userName = user.name ?? "Unknown user";
-    const userUsername = user.username ?? "unknown";
+    const userName = cleanText(user.name) ?? cleanText(user.username) ?? "Unknown user";
+    const userUsername = cleanText(user.username) ?? "unknown";
 
     return (
         <section className="min-h-screen bg-gradient-to-b from-[#0d0d0f] via-[#111113] to-[#18181b] text-white px-6 py-20 md:px-24 relative overflow-hidden">
@@ -102,5 +102,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </section>
     );
 };
+
+function cleanText(value: string | null | undefined) {
+    const trimmed = value?.trim();
+    return trimmed ? trimmed : undefined;
+}
 
 

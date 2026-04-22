@@ -18,9 +18,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   if (!post) return notFound();
 
-  const startupTitle = post.title ?? "Untitled startup";
-  const authorName = post.author?.name ?? "Unknown author";
-  const authorUsername = post.author?.username ?? "unknown";
+  const startupTitle = cleanText(post.title) ?? "Untitled startup";
+  const authorName = cleanText(post.author?.name) ?? cleanText(post.author?.username) ?? "Unknown author";
+  const authorUsername = cleanText(post.author?.username) ?? "unknown";
 
   return (
     <section className="min-h-screen bg-gradient-to-b from-[#0e0e10] via-[#111] to-[#1a1a1d] text-white px-6 py-16 md:px-20">
@@ -196,4 +196,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       </footer>
     </section>
   );
+}
+
+function cleanText(value: string | null | undefined) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
 }

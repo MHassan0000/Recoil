@@ -1,73 +1,129 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useActionState } from "react";
 import { Send } from "lucide-react";
 import MDEditor from "@uiw/react-md-editor";
-import { formSchema } from "@/lib/validation";
-import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { createStartup } from "@/lib/actions";
 import { toast } from "sonner";
+import { MAX_IMAGE_SIZE_BYTES } from "@/lib/validation";
+
+type StartupFormState = {
+  error: string;
+  status: "INITIAL" | "SUCCESS" | "ERROR";
+  fieldErrors?: Record<string, string>;
+  id?: string;
+};
+
+type StartupFormValues = {
+  title: string;
+  description: string;
+  category: string;
+};
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [pitch, setPitch] = useState("");
+  const [formValues, setFormValues] = useState<StartupFormValues>({
+    title: "",
+    description: "",
+    category: "",
+  });
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [selectedImageName, setSelectedImageName] = useState<string>("");
   const router = useRouter();
 
-  const handleFormSubmit = async (prevState: { error: string; status: string }, formData: FormData) => {
-    try {
-      const formValues = {
-        title: formData.get("title") as string,
-        description: formData.get("description") as string,
-        category: formData.get("category") as string,
-        image: formData.get("image") as string,
-        pitch: pitch,
-      };
+  const handleFormSubmit = async (prevState: StartupFormState, formData: FormData): Promise<StartupFormState> => {
+    formData.set("pitch", pitch);
 
-      await formSchema.parseAsync(formValues);
+    const result = await createStartup(formData);
 
-      const result = await createStartup(prevState, formData, pitch);
-
-      if (result.status === "SUCCESS") {
-        toast.success("🚀 Startup created successfully!", {
-          description: "Your startup has been published to the feed.",
-          duration: 4000,
-        });
-        router.push(`/Startup/${result.id}`);
-      }
-
-      setErrors({});
-      return { ...prevState, status: "SUCCESS", error: "" };
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const fieldErrors = error.flatten().fieldErrors;
-        setErrors(fieldErrors as unknown as Record<string, string>);
-        toast.error("⚠️ Validation failed", {
-          description: "Please check your inputs and try again.",
-        });
-        return {
-          ...prevState,
-          error: "Validation failed",
-          status: "ERROR",
-        };
-      }
-
-      toast.error("❌ Unexpected Error", {
-        description: "Something went wrong while creating your startup.",
+    if (result.status === "SUCCESS") {
+      toast.success("🚀 Startup created successfully!", {
+        description: "Your startup has been published to the feed.",
+        duration: 4000,
       });
 
+      setErrors({});
+      router.push(`/Startup/${result.id}`);
       return {
-        ...prevState,
-        error: "An unexpected error has occurred",
-        status: "ERROR",
+        ...result,
       };
     }
+
+    setErrors(result.fieldErrors ?? {});
+
+    toast.error("⚠️ Submit failed", {
+      description: result.error || "Please check your inputs and try again.",
+    });
+
+    return {
+      ...result,
+    };
   };
 
   const [, formAction, isPending] = useActionState(handleFormSubmit, {
     error: "",
     status: "INITIAL",
-  });
+    fieldErrors: {},
+  } as StartupFormState);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+
+    if (!file) {
+      setSelectedImageName("");
+      return;
+    }
+
+    setSelectedImageName(file.name);
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+  };
+
+  const maxImageSizeMb = Math.floor(MAX_IMAGE_SIZE_BYTES / (1024 * 1024));
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  const handleInputClearError = (name: string) => {
+    setErrors((prev) => {
+      if (!prev[name]) return prev;
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+  };
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+    handleInputClearError(name);
+  };
+
+  const handlePitchChange = (value?: string) => {
+    setPitch(value ?? "");
+    handleInputClearError("pitch");
+  };
+
+  const hasImageError = Boolean(errors.image);
+
+  const inputClassName = (field: string) =>
+    `w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 text-sm sm:text-base ${
+      errors[field] ? "ring-red-500" : "focus:ring-teal-500"
+    }`;
 
   return (
     <div className="w-full max-w-full sm:max-w-2xl mx-auto bg-gradient-to-br from-zinc-900 to-zinc-800 text-white p-6 sm:p-8 rounded-2xl shadow-2xl mt-6 sm:mt-10 border border-zinc-700/40">
@@ -75,8 +131,7 @@ const StartupForm = () => {
         Create Your Startup
       </h2>
 
-  <form action={formAction} className="space-y-6">
-        {/* Title */}
+      <form action={formAction} className="space-y-6">
         <div>
           <label htmlFor="title" className="block text-sm font-medium mb-2">
             Title
@@ -86,9 +141,9 @@ const StartupForm = () => {
             id="title"
             name="title"
             placeholder="Enter startup title..."
-            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 text-sm sm:text-base ${
-              errors.title ? "ring-red-500" : "focus:ring-teal-500"
-            }`}
+            className={inputClassName("title")}
+            value={formValues.title}
+            onChange={handleInputChange}
             required
           />
           {errors.title && (
@@ -96,7 +151,6 @@ const StartupForm = () => {
           )}
         </div>
 
-        {/* Description */}
         <div>
           <label htmlFor="description" className="block text-sm font-medium mb-2">
             Description
@@ -105,9 +159,9 @@ const StartupForm = () => {
             id="description"
             name="description"
             placeholder="Describe your startup idea..."
-            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 text-sm sm:text-base ${
-              errors.description ? "ring-red-500" : "focus:ring-teal-500"
-            } h-28 resize-none`}
+            className={`${inputClassName("description")} h-28 resize-none`}
+            value={formValues.description}
+            onChange={handleInputChange}
             required
           ></textarea>
           {errors.description && (
@@ -115,7 +169,6 @@ const StartupForm = () => {
           )}
         </div>
 
-        {/* Category */}
         <div>
           <label htmlFor="category" className="block text-sm font-medium mb-2">
             Category
@@ -123,9 +176,9 @@ const StartupForm = () => {
           <select
             id="category"
             name="category"
-            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 text-sm sm:text-base ${
-              errors.category ? "ring-red-500" : "focus:ring-teal-500"
-            }`}
+            className={inputClassName("category")}
+            value={formValues.category}
+            onChange={handleInputChange}
             required
           >
             <option value="">Select category</option>
@@ -140,25 +193,42 @@ const StartupForm = () => {
           )}
         </div>
 
-        {/* Image */}
         <div>
           <label htmlFor="image" className="block text-sm font-medium mb-2">
-            Image
+            Startup Image
           </label>
           <input
             id="image"
             name="image"
-            placeholder="Startup Image URL..."
-            className={`w-full p-3 rounded-lg bg-zinc-700 focus:outline-none focus:ring-2 text-sm sm:text-base ${
-              errors.image ? "ring-red-500" : "focus:ring-teal-500"
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/avif"
+            className={`w-full rounded-lg bg-zinc-700/70 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-500 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-600 ${
+              hasImageError ? "ring-2 ring-red-500" : "focus:ring-2 focus:ring-teal-500"
             }`}
+            onChange={(event) => {
+              handleImageChange(event);
+              handleInputClearError("image");
+            }}
+            required
           />
+          <p className="text-zinc-300 text-xs mt-2">
+            Upload JPG, PNG, WEBP, or AVIF. Max file size: {maxImageSizeMb}MB.
+          </p>
+          {selectedImageName && (
+            <p className="text-zinc-200 text-sm mt-1">Selected: {selectedImageName}</p>
+          )}
+          {previewUrl && (
+            <img
+              src={previewUrl}
+              alt="Selected startup preview"
+              className="mt-3 h-40 w-full rounded-lg object-cover border border-zinc-600"
+            />
+          )}
           {errors.image && (
             <p className="text-red-400 text-sm mt-1">{errors.image}</p>
           )}
         </div>
 
-        {/* Pitch */}
         <div data-color-mode="dark">
           <label htmlFor="pitch" className="block text-sm font-medium mb-2">
             Pitch
@@ -166,7 +236,7 @@ const StartupForm = () => {
           <MDEditor
             id="pitch"
             value={pitch}
-            onChange={(value) => setPitch(value ?? "")}
+            onChange={handlePitchChange}
             preview="edit"
             height={240}
             style={{ borderRadius: 20, overflow: "hidden" }}
@@ -181,12 +251,12 @@ const StartupForm = () => {
               disallowedElements: ["style"],
             }}
           />
+          <input type="hidden" name="pitch" value={pitch} />
           {errors.pitch && (
             <p className="text-red-400 text-sm mt-1">{errors.pitch}</p>
           )}
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={isPending}

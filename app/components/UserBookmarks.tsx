@@ -9,6 +9,7 @@ interface UserBookmarksProps {
 }
 
 const UserBookmarks = async ({ id, authorName }: UserBookmarksProps) => {
+  const displayName = authorName?.trim() || "this user";
   
   const bookmarksData = await client.fetch(BOOKMARKS_BY_AUTHOR_ID_QUERY, { id });
   const bookmarks = bookmarksData?.bookmarks ?? [];
@@ -24,7 +25,7 @@ const UserBookmarks = async ({ id, authorName }: UserBookmarksProps) => {
         </div>
       ) : (
         <p className="text-gray-400 text-lg mt-5 text-center">
-          No bookmarks found for <span className="font-semibold text-yellow-400">“{authorName}”</span>.
+          No bookmarks found for <span className="font-semibold text-yellow-400">“{displayName}”</span>.
         </p>
       )}
     </>

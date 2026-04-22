@@ -5,6 +5,7 @@ import Card from './Card'
 
 const UserStartups = async ({id , authorName} : {id :string , authorName : string}) => {
     const startups = await client.fetch(STARTUPS_BY_AUTHOR_ID_QUERY, { id })
+    const displayName = authorName?.trim() || "this user"
 
   return (
     <>
@@ -14,7 +15,7 @@ const UserStartups = async ({id , authorName} : {id :string , authorName : strin
                       ))
                   ) : (
                     <p className="text-gray-400 text-lg mt-5">
-                      No startups found for “{authorName}”.
+                      No startups found for “{displayName}”.
                     </p>
                   )}
     

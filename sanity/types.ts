@@ -22,6 +22,13 @@ export type AuthorReference = {
   [internalGroqTypeReferenceTo]?: "author";
 };
 
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
 export type Startup = {
   _id: string;
   _type: "startup";
@@ -34,11 +41,33 @@ export type Startup = {
   views?: number;
   description?: string;
   category?: string;
-  image?: string;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   pitch?: Markdown;
 };
 
 export type Markdown = string;
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
 
 export type Slug = {
   _type: "slug";
@@ -110,22 +139,6 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
 export type SanityFileAsset = {
   _id: string;
   _type: "sanity.fileAsset";
@@ -187,8 +200,11 @@ export type Geopoint = {
 
 export type AllSanitySchemaTypes =
   | AuthorReference
+  | SanityImageAssetReference
   | Startup
   | Markdown
+  | SanityImageCrop
+  | SanityImageHotspot
   | Slug
   | StartupReference
   | Author
@@ -196,8 +212,6 @@ export type AllSanitySchemaTypes =
   | SanityImagePalette
   | SanityImageDimensions
   | SanityImageMetadata
-  | SanityImageHotspot
-  | SanityImageCrop
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
@@ -205,7 +219,7 @@ export type AllSanitySchemaTypes =
 
 // Source: sanity/lib/queries.ts
 // Variable: STARTUPS_QUERY
-// Query: *[_type == "startup" && defined(slug.current) ] | order(_createdAt desc) {	_id,	title,	slug,	_createdAt,	author -> {		_id, name, username, image, bio	},	views,	description,	category,	image	}
+// Query: *[_type == "startup" && defined(slug.current) ] | order(_createdAt desc) {	_id,	title,	slug,	_createdAt,	author -> {		_id, name, username, image, bio	},	views,	description,	category,	"image": image.asset->url	}
 export type STARTUPS_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
@@ -226,7 +240,7 @@ export type STARTUPS_QUERY_RESULT = Array<{
 
 // Source: sanity/lib/queries.ts
 // Variable: STARTUP_BY_ID_QUERY
-// Query: *[_type == "startup" && _id == $id][0] {	_id,	title,	slug,	_createdAt,	author -> {		_id, name, username, image, bio	},	views,	description,	category,	image,	pitch}
+// Query: *[_type == "startup" && _id == $id][0] {	_id,	title,	slug,	_createdAt,	author -> {		_id, name, username, image, bio	},	views,	description,	category,	"image": image.asset->url,	pitch}
 export type STARTUP_BY_ID_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -283,7 +297,7 @@ export type AUTHOR_BY_ID_QUERY_RESULT = {
 
 // Source: sanity/lib/queries.ts
 // Variable: STARTUPS_BY_AUTHOR_ID_QUERY
-// Query: *[_type == "startup" && author._ref == $id] | order(_createdAt desc) {	_id,	title,	slug,	_createdAt,	author -> {		_id, name, username, image, bio	},	views,	description,	category,	image	}
+// Query: *[_type == "startup" && author._ref == $id] | order(_createdAt desc) {	_id,	title,	slug,	_createdAt,	author -> {		_id, name, username, image, bio	},	views,	description,	category,	"image": image.asset->url	}
 export type STARTUPS_BY_AUTHOR_ID_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
@@ -304,7 +318,7 @@ export type STARTUPS_BY_AUTHOR_ID_QUERY_RESULT = Array<{
 
 // Source: sanity/lib/queries.ts
 // Variable: BOOKMARKS_BY_AUTHOR_ID_QUERY
-// Query: *[_type == "author" && _id == $id][0]{    _id,    name,    bookmarks[]->{      _id,      title,      slug,      _createdAt,      author->{        _id, name, username, image, bio      },      views,      description,      category,      image    }  }
+// Query: *[_type == "author" && _id == $id][0]{    _id,    name,    bookmarks[]->{      _id,      title,      slug,      _createdAt,      author->{        _id, name, username, image, bio      },      views,      description,      category,      "image": image.asset->url    }  }
 export type BOOKMARKS_BY_AUTHOR_ID_QUERY_RESULT = {
   _id: string;
   name: string | null;
@@ -331,12 +345,12 @@ export type BOOKMARKS_BY_AUTHOR_ID_QUERY_RESULT = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "startup" && defined(slug.current) ] | order(_createdAt desc) {\n\t_id,\n\ttitle,\n\tslug,\n\t_createdAt,\n\tauthor -> {\n\t\t_id, name, username, image, bio\n\t},\n\tviews,\n\tdescription,\n\tcategory,\n\timage\n\t\n}': STARTUPS_QUERY_RESULT;
-    '*[_type == "startup" && _id == $id][0] {\n\t_id,\n\ttitle,\n\tslug,\n\t_createdAt,\n\tauthor -> {\n\t\t_id, name, username, image, bio\n\t},\n\tviews,\n\tdescription,\n\tcategory,\n\timage,\n\tpitch\n}': STARTUP_BY_ID_QUERY_RESULT;
+    '*[_type == "startup" && defined(slug.current) ] | order(_createdAt desc) {\n\t_id,\n\ttitle,\n\tslug,\n\t_createdAt,\n\tauthor -> {\n\t\t_id, name, username, image, bio\n\t},\n\tviews,\n\tdescription,\n\tcategory,\n\t"image": image.asset->url\n\t\n}': STARTUPS_QUERY_RESULT;
+    '*[_type == "startup" && _id == $id][0] {\n\t_id,\n\ttitle,\n\tslug,\n\t_createdAt,\n\tauthor -> {\n\t\t_id, name, username, image, bio\n\t},\n\tviews,\n\tdescription,\n\tcategory,\n\t"image": image.asset->url,\n\tpitch\n}': STARTUP_BY_ID_QUERY_RESULT;
     '*[_type == "startup" && _id == $id][0]{\n\t\t_id, views\n\t}': STARTUP_BY_VIEWS_RESULT;
     '*[_type == "author" && id == $id][0]{\n\t\t_id, id, name, username, image, bio, email}': AUTHOR_BY_GITHUB_ID_QUERY_RESULT;
     '*[_type == "author" && _id == $id][0]{\n\n\t\t_id,id , _createdAt, name, username, image, bio, email}': AUTHOR_BY_ID_QUERY_RESULT;
-    '*[_type == "startup" && author._ref == $id] | order(_createdAt desc) {\n\t_id,\n\ttitle,\n\tslug,\n\t_createdAt,\n\tauthor -> {\n\t\t_id, name, username, image, bio\n\t},\n\tviews,\n\tdescription,\n\tcategory,\n\timage\n\t\n}': STARTUPS_BY_AUTHOR_ID_QUERY_RESULT;
-    '\n  *[_type == "author" && _id == $id][0]{\n    _id,\n    name,\n    bookmarks[]->{\n      _id,\n      title,\n      slug,\n      _createdAt,\n      author->{\n        _id, name, username, image, bio\n      },\n      views,\n      description,\n      category,\n      image\n    }\n  }\n': BOOKMARKS_BY_AUTHOR_ID_QUERY_RESULT;
+    '*[_type == "startup" && author._ref == $id] | order(_createdAt desc) {\n\t_id,\n\ttitle,\n\tslug,\n\t_createdAt,\n\tauthor -> {\n\t\t_id, name, username, image, bio\n\t},\n\tviews,\n\tdescription,\n\tcategory,\n\t"image": image.asset->url\n\t\n}': STARTUPS_BY_AUTHOR_ID_QUERY_RESULT;
+    '\n  *[_type == "author" && _id == $id][0]{\n    _id,\n    name,\n    bookmarks[]->{\n      _id,\n      title,\n      slug,\n      _createdAt,\n      author->{\n        _id, name, username, image, bio\n      },\n      views,\n      description,\n      category,\n      "image": image.asset->url\n    }\n  }\n': BOOKMARKS_BY_AUTHOR_ID_QUERY_RESULT;
   }
 }

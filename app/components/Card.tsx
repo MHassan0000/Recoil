@@ -24,6 +24,7 @@ const Card = ({ post }: { post: CardType }) => {
 
   // Initialize bookmark state
   const [isBookmarked, setIsBookmarked] = useState<boolean>(!!post.isBookmarked);
+  const [isSyncingBookmark, setIsSyncingBookmark] = useState(false);
 
   const userId = session?.user?.id ?? null;
 
@@ -40,6 +41,14 @@ const Card = ({ post }: { post: CardType }) => {
       toast.info("Please log in to bookmark startups.");
       return;
     }
+
+    if (isSyncingBookmark) return;
+
+    const previousState = isBookmarked;
+    const optimisticState = !previousState;
+
+    setIsBookmarked(optimisticState);
+    setIsSyncingBookmark(true);
 
     try {
       const result = await toggleBookmark(userId, id);
@@ -64,11 +73,15 @@ const Card = ({ post }: { post: CardType }) => {
           }
         }
       } else {
+        setIsBookmarked(previousState);
         toast.error(result?.message || "Something went wrong while toggling bookmark.");
       }
     } catch (error) {
+      setIsBookmarked(previousState);
       console.error(error);
       toast.error("An unexpected error occurred.");
+    } finally {
+      setIsSyncingBookmark(false);
     }
   };
 
@@ -94,7 +107,7 @@ const Card = ({ post }: { post: CardType }) => {
           {/* ===== Bookmark Icon ===== */}
           <button
             onClick={handleBookmarkClick}
-            disabled={isPending}
+            disabled={isPending || isSyncingBookmark}
             className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
               isBookmarked
                 ? "text-yellow-400 hover:text-yellow-500 bg-yellow-400/10"

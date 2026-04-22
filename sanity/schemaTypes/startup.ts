@@ -15,15 +15,25 @@ export const startup = defineType({
       options: { source: "title" },
     }),
 
-    defineField({ name: "author", type: "reference", to: [{ type: "author" }] }),
+    defineField({
+      name: "author",
+      type: "reference",
+      to: [{ type: "author" }],
+      weak: true,
+    }),
     defineField({ name: "views", type: "number" }),
     defineField({ name: "description", type: "text" }),
     defineField({ name: "category", type: "string",
         validation: (Rule) => Rule.min(1).max(20).required().error('Category is required')
      }),
-    defineField({ name: "image", type: "url",
-        validation: (Rule)=> Rule.required(),
-     }),
+    defineField({
+      name: "image",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+      validation: (Rule) => Rule.required().error("Startup image is required"),
+    }),
     defineField({ name: "pitch", type: "markdown" }),
   ],
 

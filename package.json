@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "node scripts/start-standalone.cjs",
     "lint": "eslint",
-    "typegen": "sanity schema extract && sanity typegen generate"
+    "typegen": "sanity schema extract && sanity typegen generate",
+    "sanity:reset": "node scripts/sanity-reset-dataset.cjs"
   },
   "overrides": {
     "next": "$next",

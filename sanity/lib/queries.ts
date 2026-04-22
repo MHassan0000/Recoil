@@ -1,5 +1,7 @@
 import { defineQuery } from "next-sanity";
 
+const IMAGE_FRAGMENT = `"image": image.asset->url`;
+
 export const STARTUPS_QUERY = defineQuery(
 	`*[_type == "startup" && defined(slug.current) ] | order(_createdAt desc) {
 	_id,
@@ -12,7 +14,7 @@ export const STARTUPS_QUERY = defineQuery(
 	views,
 	description,
 	category,
-	image
+	${IMAGE_FRAGMENT}
 	
 }`
 );
@@ -28,7 +30,7 @@ export const STARTUP_BY_ID_QUERY = defineQuery(
 	views,
 	description,
 	category,
-	image,
+	${IMAGE_FRAGMENT},
 	pitch
 }`
 );
@@ -60,7 +62,7 @@ export const STARTUPS_BY_AUTHOR_ID_QUERY = defineQuery(
 	views,
 	description,
 	category,
-	image
+	${IMAGE_FRAGMENT}
 	
 }`
 );
@@ -80,7 +82,7 @@ export const BOOKMARKS_BY_AUTHOR_ID_QUERY = defineQuery(`
       views,
       description,
       category,
-      image
+      ${IMAGE_FRAGMENT}
     }
   }
 `);

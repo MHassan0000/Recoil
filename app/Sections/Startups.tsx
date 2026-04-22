@@ -31,17 +31,17 @@ export default async function Startups({ query }: { query: string }) {
   // Filter for search (same logic as before)
   const filteredPosts = searchQuery
     ? PostsWithBookmarks.filter((post: CardType) => {
-        const title = (post.title || "").toString().toLowerCase();
-        const category = (post.category || "").toString().toLowerCase();
-        const authorName = (post.author?.name || "").toString().toLowerCase();
-        const description = (post.description || "").toString().toLowerCase();
-        return (
-          title.includes(searchQuery) ||
-          category.includes(searchQuery) ||
-          authorName.includes(searchQuery) ||
-          description.includes(searchQuery)
-        );
-      })
+      const title = (post.title || "").toString().toLowerCase();
+      const category = (post.category || "").toString().toLowerCase();
+      const authorName = (post.author?.name || "").toString().toLowerCase();
+      const description = (post.description || "").toString().toLowerCase();
+      return (
+        title.includes(searchQuery) ||
+        category.includes(searchQuery) ||
+        authorName.includes(searchQuery) ||
+        description.includes(searchQuery)
+      );
+    })
     : PostsWithBookmarks;
 
   const mappedPosts = filteredPosts;
@@ -69,7 +69,7 @@ export default async function Startups({ query }: { query: string }) {
             </div>
           ) : (
             <p className="text-gray-400 text-lg mt-5 text-center">
-              No startups found for “{query}”.
+              No startups found
             </p>
           )}
         </div>

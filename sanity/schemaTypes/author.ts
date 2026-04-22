@@ -22,6 +22,7 @@ export const author = defineType({
         {
           type: "reference",
           to: [{ type: "startup" }],
+          weak: true,
         },
       ],
     }),

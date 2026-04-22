@@ -32,7 +32,7 @@ export default async function Page({
 
       {/* ===== Bookmarked Cards Section ===== */}
       <div className="max-w-full mx-auto">
-        <UserBookmarks id={id} authorName={author?.name ?? "this user"} />
+        <UserBookmarks id={id} authorName={cleanText(author?.name) ?? cleanText(author?.username) ?? "this user"} />
       </div>
 
       {/* ===== Footer Accent ===== */}
@@ -44,4 +44,9 @@ export default async function Page({
       </div>
     </section>
   );
+}
+
+function cleanText(value: string | null | undefined) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
 }

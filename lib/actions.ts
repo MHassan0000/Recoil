@@ -6,6 +6,7 @@ import slugify from "slugify";
 import { writeClient } from "@/sanity/lib/write-client";
 import { getImageFileError, startupTextSchema } from "./validation";
 import { revalidatePath } from "next/cache";
+import { revalidateSyncTags } from "next-sanity";
 
 type CreateStartupResult = {
   id?: string;
@@ -98,6 +99,11 @@ export const createStartup = async (form: FormData): Promise<CreateStartupResult
                 _type: 'startup',
                 ...startup,
             });
+
+            await revalidateSyncTags(["sanity"]);
+            revalidatePath("/");
+            revalidatePath("/Startup/Create");
+
             return parseServerActionResponse({
               id: result._id,
               status: "SUCCESS",
